@@ -2,6 +2,7 @@ package com.wangguangwu.client.http;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.Socket;
@@ -11,6 +12,7 @@ import java.net.Socket;
  * @date 2022/2/11 4:04 PM
  * @description 使用 socket 发送 http 请求
  */
+@Slf4j
 @Getter
 @Setter
 public class Bootstrap {
@@ -20,6 +22,7 @@ public class Bootstrap {
     private String host = "127.0.0.1";
 
     public static void main(String[] args) {
+        log.info("todo 以后打日志用 log 打，日志写英文");
         try {
             Bootstrap bootstrap = new Bootstrap();
             // 发送 http 请求
