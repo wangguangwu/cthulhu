@@ -1,7 +1,7 @@
-package com.wangguangwu.client.http.network;
+package com.wangguangwu.client.startUp;
 
-import com.wangguangwu.client.http.network.crawler.Crawler;
-import com.wangguangwu.client.http.network.crawler.impl.CrawlerImpl;
+import com.wangguangwu.client.service.Crawler;
+import com.wangguangwu.client.service.impl.CrawlerImpl;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class Bootstrap {
 
-    private int port = 80;
+    private int port = 443;
 
-    private String url = "www.baidu.com";
+    private String url = "www.baidu.com?client=1";
 
     public static void main(String[] args) {
         log.info("client is running...");

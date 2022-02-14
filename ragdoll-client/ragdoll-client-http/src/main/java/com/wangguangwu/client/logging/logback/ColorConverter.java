@@ -1,4 +1,4 @@
-package com.wangguangwu.client.http.logging.logback;
+package com.wangguangwu.client.logging.logback;
 
 
 import java.util.Collections;
@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-import com.wangguangwu.client.http.logging.ansi.AnsiColor;
-import com.wangguangwu.client.http.logging.ansi.AnsiElement;
-import com.wangguangwu.client.http.logging.ansi.AnsiOutput;
-import com.wangguangwu.client.http.logging.ansi.AnsiStyle;
+import com.wangguangwu.client.logging.ansi.AnsiColor;
+import com.wangguangwu.client.logging.ansi.AnsiElement;
+import com.wangguangwu.client.logging.ansi.AnsiOutput;
+import com.wangguangwu.client.logging.ansi.AnsiStyle;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;

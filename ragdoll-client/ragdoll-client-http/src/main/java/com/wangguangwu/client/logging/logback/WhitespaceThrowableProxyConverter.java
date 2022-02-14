@@ -1,4 +1,4 @@
-package com.wangguangwu.client.http.logging.logback;
+package com.wangguangwu.client.logging.logback;
 
 import ch.qos.logback.classic.pattern.ThrowableProxyConverter;
 import ch.qos.logback.classic.spi.IThrowableProxy;

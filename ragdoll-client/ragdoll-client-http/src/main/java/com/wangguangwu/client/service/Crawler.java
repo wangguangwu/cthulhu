@@ -1,4 +1,4 @@
-package com.wangguangwu.client.http.network.crawler;
+package com.wangguangwu.client.service;
 
 /**
  * @author wangguangwu
