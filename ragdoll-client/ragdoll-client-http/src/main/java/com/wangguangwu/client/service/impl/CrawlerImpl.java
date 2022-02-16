@@ -1,6 +1,8 @@
 package com.wangguangwu.client.service.impl;
 
-import com.wangguangwu.client.http.Response;
+import com.wangguangwu.client.http.Response1;
+import com.wangguangwu.client.http.Response2;
+import com.wangguangwu.client.http.Response3;
 import com.wangguangwu.client.service.Crawler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,29 +28,38 @@ public class CrawlerImpl implements Crawler {
         String host = hostAndUrl.get("host");
         url = hostAndUrl.get("url");
         try (
-                //Https 请求使用 SSLSocketFactory，Http 请求直接创建 Socket
+                // Https 请求使用 SSLSocketFactory，Http 请求直接创建 Socket
                 Socket socket = SSLSocketFactory.getDefault().createSocket(host, port);
                 // 创建字符缓冲区（提高效率）
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                BufferedInputStream bis = new BufferedInputStream(socket.getInputStream())
+                InputStream in = socket.getInputStream()
         ) {
             if (socket.isConnected()) {
-                log.info("connection established, remote address:{}", socket.getRemoteSocketAddress());
+                log.info("connection established, local address: {}, remote address: {}", socket.getLocalSocketAddress(), socket.getRemoteSocketAddress());
+                // set timeout
+                socket.setSoTimeout(100000);
             }
 
-            // 写入请求
+            // write request to socket
             writer.write("GET " + url + " HTTP/1.1\r\n");
             writer.write("HOST:" + host + "\r\n");
             writer.write("Accept: */*\r\n");
             writer.write("Connection: Keep-Alive\r\n");
             writer.write("\r\n");
-            // 必须要调用 flush 方法进行刷新
+            // flush stream
             writer.flush();
 
-            // 读取响应
-            Response response = new Response(bis);
-            response.setHost(host);
+            long startTime = System.currentTimeMillis();
+
+//            Response1 response = new Response1(in);
+
+//            Response2 response = new Response2(in);
+
+            Response3 response = new Response3(in);
             response.parse();
+
+            long endTime = System.currentTimeMillis();
+            log.info("start time: {}, end time: {}, cost time: {}", startTime, endTime, endTime - startTime);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,10 +1,11 @@
 package com.wangguangwu.client.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static com.wangguangwu.client.entity.Symbol.EQUALS;
-import static com.wangguangwu.client.entity.Symbol.SLASH;
+import static com.wangguangwu.client.entity.Symbol.*;
 
 /**
  * @author wangguangwu
@@ -12,7 +13,6 @@ import static com.wangguangwu.client.entity.Symbol.SLASH;
  * @description 字符串工具类
  */
 public class StringUtil {
-
 
     /**
      * 解析出 host 和 url
@@ -24,6 +24,7 @@ public class StringUtil {
         Map<String, String> hostAndUrl = new HashMap<>(2);
         String str1 = url;
         String str2 = "/";
+
         if (url.contains(".com")) {
             str1 = url.substring(0, url.indexOf(".com") + 4);
             str2 += url.substring(url.indexOf(".com") + 4);
@@ -41,9 +42,9 @@ public class StringUtil {
      * @return string
      */
     public static String map2String(Map<String, String> map) {
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            result.append(entry.getKey()).append(EQUALS).append(entry.getValue()).append("\r\n");
+            result.append(entry.getKey()).append(SEMICOLON).append(" ").append(entry.getValue()).append("\r\n");
         }
         return result.toString();
     }

@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-
 /**
+ * visit baidu's official website and get a response.
+ *
  * @author wangguangwu
  * @date 2022/2/12 8:10 PM
- * @description 访问百度官网并且获得响应
  */
 @Slf4j
 @Getter
@@ -19,6 +19,7 @@ public class Bootstrap {
 
     private int port = 443;
 
+//    private String url = "www.baidu.com?client=1";
     private String url = "www.baidu.com?client=1";
 
     public static void main(String[] args) {

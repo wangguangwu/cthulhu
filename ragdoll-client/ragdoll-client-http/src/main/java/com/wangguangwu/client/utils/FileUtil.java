@@ -5,6 +5,7 @@ import org.jsoup.internal.StringUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * @author wangguangwu
@@ -39,8 +40,8 @@ public class FileUtil {
         if (StringUtil.isBlank(fileFormat)) {
             fileFormat = "txt";
         }
-        String folderPath = System.getProperty("user.dir")
-                + File.separator + "ragdoll-client/ragdoll-client-http/export";
+        String folderPath = Objects.requireNonNull(FileUtil.class.getResource("/"))
+                .getPath() + "export";
         // 判断文件夹是否存在
         createFolder(folderPath);
         String filePath = folderPath + File.separator + fileName + "." + fileFormat;
