@@ -15,10 +15,10 @@ import static com.wangguangwu.client.entity.Symbol.*;
 import static com.wangguangwu.client.utils.StringUtil.map2String;
 
 /**
- * use a little array, such as 1024 bytes
+ * use a little array, such as 1024 bytes size
  * to receive response line and header, maybe has a little response body
  * parse the little array to get the response body length
- * set a larger array to receive the response body (the capacity we will need to calculate)
+ * set a larger array to receive the response body (the capacity we will need to calculate).
  *
  * @author wangguangwu
  * @date 2022/2/16
@@ -26,8 +26,7 @@ import static com.wangguangwu.client.utils.StringUtil.map2String;
 @Slf4j
 @Getter
 @Setter
-public class Response3 {
-
+public class Response {
 
     /**
      * inputStream
@@ -74,7 +73,12 @@ public class Response3 {
      */
     private int remainingLength;
 
-    public Response3(InputStream inputStream) {
+    /**
+     * inputStream constructor
+     *
+     * @param inputStream inputStream
+     */
+    public Response(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
@@ -82,6 +86,7 @@ public class Response3 {
      * parse the response.
      */
     public void parse() {
+
         // response line and header and empty line
         byte[] firstRead = parseInputStream2Bytes(1024);
 
@@ -98,10 +103,13 @@ public class Response3 {
 
                 // response line
                 if (parseResponseLine) {
+                    // length of a line
                     int length = i - index;
+                    // buffer array
                     byte[] subBytes = new byte[length];
                     // copy data
                     System.arraycopy(firstRead, index, subBytes, 0, length);
+                    // responseLine, such as HTTP/1.1 200 OK
                     String[] responseLine = new String(subBytes, StandardCharsets.UTF_8).split(SPACE);
                     protocol = responseLine[0];
                     code = Integer.parseInt(responseLine[1]);
@@ -111,7 +119,7 @@ public class Response3 {
                 }
 
                 // parse response header
-                // line length
+                // length of a line
                 int length = i - index;
                 // create a new buffer array
                 byte[] subBytes = new byte[length];
@@ -151,11 +159,11 @@ public class Response3 {
             responseBodyLength = Integer.parseInt(headerMap.get(CONTENT_LENGTH));
         }
 
-        //
-        byte[] responseContent = parseInputStream2Bytes(responseBodyLength - remainingLength);
+        // response body content
+        byte[] responseBodyContent = parseInputStream2Bytes(responseBodyLength - remainingLength);
 
         log.info("response body: {}", new String(remainContent, StandardCharsets.UTF_8)
-                + new String(responseContent, StandardCharsets.UTF_8));
+                + new String(responseBodyContent, StandardCharsets.UTF_8));
     }
 
     /**
@@ -172,13 +180,13 @@ public class Response3 {
             while (readCount < capacity) {
                 oldReadCount = readCount;
                 readCount += inputStream.read(bytes, readCount, capacity - readCount);
-                // i = -1
+                // i = -1 represent the end of inputStream
                 if (oldReadCount > readCount) {
                     break;
                 }
             }
         } catch (IOException e) {
-            log.error("Response3 parseInputStream2Bytes error: \r\n", e);
+            log.error("Response parseInputStream2Bytes error: \r\n", e);
         }
         return bytes;
     }

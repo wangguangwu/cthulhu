@@ -14,7 +14,7 @@ public class Commons {
     public static final String CONTENT_LENGTH = "Content-Length";
 
     /**
-     *
+     * .com
      */
     public static final String COM = ".com";
 

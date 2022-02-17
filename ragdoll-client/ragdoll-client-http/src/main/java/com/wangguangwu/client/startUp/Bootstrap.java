@@ -7,10 +7,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * visit baidu's official website and get a response.
+ * visit the website corresponding to the url
+ * parse response from the website.
  *
  * @author wangguangwu
- * @date 2022/2/12 8:10 PM
+ * @date 2022/2/12
  */
 @Slf4j
 @Getter
@@ -19,8 +20,7 @@ public class Bootstrap {
 
     private int port = 443;
 
-//    private String url = "www.baidu.com?client=1";
-    private String url = "www.baidu.com?client=1";
+    private String url = "www.zhipin.com/hangzhou/";
 
     public static void main(String[] args) {
         log.info("client is running...");

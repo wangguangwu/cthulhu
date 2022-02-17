@@ -41,4 +41,9 @@ public class Symbol {
      * ?
      */
     public static final String QUESTION_MARK = "?";
+
+    /**
+     * .
+     */
+    public static final char POINT = '.';
 }

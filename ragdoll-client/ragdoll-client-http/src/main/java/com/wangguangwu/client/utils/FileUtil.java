@@ -1,50 +1,73 @@
 package com.wangguangwu.client.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.internal.StringUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 
+import static com.wangguangwu.client.entity.Symbol.POINT;
+import static com.wangguangwu.client.entity.Symbol.SLASH;
+
 /**
+ * some methods to analyse file.
+ *
  * @author wangguangwu
- * @date 2022/2/14 11:18 AM
- * @description 文件工具类
+ * @date 2022/2/14
  */
 @Slf4j
 public class FileUtil {
 
-    public static void saveData2File(String fileName, String fileFormat, String data) {
-        String filePath = createFile(fileName, fileFormat);
+    /**
+     * default fileType.
+     */
+    private static final String DEFAULT_FILETYPE = "txt";
+
+    /**
+     * commonly used fileType.
+     */
+    private static final List<String> FILETYPE_LIST =
+            List.of("txt", "doc", "docx", "png", "jpg");
+
+    /**
+     * save data to file.
+     * @param fileName name of the file
+     * @param data data of the file
+     */
+    public static void saveData2File(String fileName, String data) {
+        // filePath
+        String filePath = createFile(fileName);
 
         try (BufferedWriter writer
                      = new BufferedWriter(new OutputStreamWriter
                 (new FileOutputStream(filePath, false), StandardCharsets.UTF_8))) {
-            // 往文件中写入数据
+            // write data to the file
             writer.write(data);
             log.info("write data to file: {}", filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("FileUtil saveData2File error: \r\n", e);
         }
     }
 
 
     /**
-     * 判断文件是否存在，不存在则创建文件
+     * determine whether the file exists
+     * create the file if it does not exist.
      *
-     * @param fileName   文件名
-     * @param fileFormat 文件格式
+     * @param fileName name of the file, such as "helloWorld" and "HelloWorld.txt"
      */
-    public static String createFile(String fileName, String fileFormat) {
-        if (StringUtil.isBlank(fileFormat)) {
-            fileFormat = "txt";
-        }
-        String folderPath = Objects.requireNonNull(FileUtil.class.getResource("/"))
+    public static String createFile(String fileName) {
+        // file type
+        String fileType = fileName.indexOf(POINT) != -1
+                ? getFileType(fileName) : DEFAULT_FILETYPE;
+        // folderPath
+        String folderPath = Objects.requireNonNull(FileUtil.class.getResource(SLASH))
                 .getPath() + "export";
-        // 判断文件夹是否存在
+        // folder
         createFolder(folderPath);
-        String filePath = folderPath + File.separator + fileName + "." + fileFormat;
+        // filePath
+        String filePath = folderPath + File.separator + fileName + POINT + fileType;
         File file = new File(filePath);
         if (file.exists() && file.exists()) {
             return filePath;
@@ -54,15 +77,27 @@ public class FileUtil {
                 log.info("create file: {}", filePath);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("FileUtil createFile error: \r\n", e);
         }
         return filePath;
     }
 
     /**
-     * 创建文件夹
+     * get fileType.
      *
-     * @param path 文件夹路径
+     * @param fileName name of the file
+     * @return fileType
+     */
+    private static String getFileType(String fileName) {
+        String fileType = fileName.substring(fileName.lastIndexOf(POINT) + 1);
+        return FILETYPE_LIST.contains(fileType) ? fileType : DEFAULT_FILETYPE;
+    }
+
+    /**
+     * determine whether the folder exists
+     * create the folder if it does not exist.
+     *
+     * @param path path of the folder
      */
     public static void createFolder(String path) {
         File file = new File(path);

@@ -1,10 +1,9 @@
 package com.wangguangwu.client.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import static com.wangguangwu.client.entity.Commons.COM;
 import static com.wangguangwu.client.entity.Symbol.*;
 
 /**
@@ -15,19 +14,19 @@ import static com.wangguangwu.client.entity.Symbol.*;
 public class StringUtil {
 
     /**
-     * 解析出 host 和 url
+     * parse host and url.
      *
-     * @param url 访问站点 + 路径
-     * @return host 和 url
+     * @param url host + url
+     * @return host and url
      */
     public static Map<String, String> parseHostAndUrl(String url) {
         Map<String, String> hostAndUrl = new HashMap<>(2);
         String str1 = url;
-        String str2 = "/";
+        String str2 = "";
 
-        if (url.contains(".com")) {
-            str1 = url.substring(0, url.indexOf(".com") + 4);
-            str2 += url.substring(url.indexOf(".com") + 4);
+        if (url.contains(COM)) {
+            str1 = url.substring(0, url.indexOf(COM) + 4);
+            str2 += url.substring(url.indexOf(COM) + 4);
         }
 
         hostAndUrl.put("host", str1);
@@ -36,7 +35,7 @@ public class StringUtil {
     }
 
     /**
-     * 将 map 转化为 string
+     * transfer map to string.
      *
      * @param map map
      * @return string
