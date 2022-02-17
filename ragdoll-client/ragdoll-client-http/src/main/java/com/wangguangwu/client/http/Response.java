@@ -205,7 +205,9 @@ public class Response {
         log.info("responseBody: \r\n{}", responseBody);
         // save data to file
         wholeResponse = responseLine + responseHeader + responseEmptyLine + responseBody;
-        saveData2File(handleFileName(), wholeResponse);
+        handleFileName();
+        saveData2File(fileName + "_responseBody", responseBody);
+        saveData2File(fileName + "_response", wholeResponse);
     }
 
     /**
@@ -234,19 +236,16 @@ public class Response {
     }
 
     /**
-     * ex: www.baidu.com
-     *
-     * @return baidu_1645077418458
+     * ex: www.baidu.com ==> baidu
      */
-    private String handleFileName() {
+    private void handleFileName() {
         int index1 = fileName.indexOf(POINT);
         int index2 = fileName.lastIndexOf(POINT);
-        fileName = fileName.substring(index1 + 1, index2) + "_" + System.currentTimeMillis();
-        return fileName;
+        fileName = fileName.substring(index1 + 1, index2);
     }
 
     public static void main(String[] args) {
-        String a ="Cache-Control: no-cache\n" +
+        String a = "Cache-Control: no-cache\n" +
                 "process-stage: Stage-Outbound\n" +
                 "Connection: keep-alive\n" +
                 "Set-Cookie: lastCity=101210100; path=/; domain=.zhipin.com; Max-Age=31536000; Expires=Fri, 17-Feb-2023 06:26:10 GMT\n" +
