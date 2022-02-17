@@ -11,7 +11,7 @@ import static com.wangguangwu.client.entity.Symbol.POINT;
 import static com.wangguangwu.client.entity.Symbol.SLASH;
 
 /**
- * some methods to analyse file.
+ * some methods to operate file.
  *
  * @author wangguangwu
  * @date 2022/2/14
@@ -32,8 +32,9 @@ public class FileUtil {
 
     /**
      * save data to file.
+     *
      * @param fileName name of the file
-     * @param data data of the file
+     * @param data     data of the file
      */
     public static void saveData2File(String fileName, String data) {
         // filePath
@@ -49,7 +50,6 @@ public class FileUtil {
             log.error("FileUtil saveData2File error: \r\n", e);
         }
     }
-
 
     /**
      * determine whether the file exists

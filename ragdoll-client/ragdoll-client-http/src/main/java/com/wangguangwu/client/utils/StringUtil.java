@@ -7,9 +7,10 @@ import static com.wangguangwu.client.entity.Commons.COM;
 import static com.wangguangwu.client.entity.Symbol.*;
 
 /**
+ * some methods to operate string.
+ *
  * @author wangguangwu
  * @date 2022/2/14 6:26 AM
- * @description 字符串工具类
  */
 public class StringUtil {
 
@@ -47,5 +48,4 @@ public class StringUtil {
         }
         return result.toString();
     }
-
 }

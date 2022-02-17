@@ -6,9 +6,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static com.wangguangwu.client.utils.HtmlParse.formatHtml;
 
 /**
+ * HtmlParse test class
+ *
  * @author wangguangwu
- * @date 2022/2/14 6:53 AM
- * @description HtmlParse 测试类
+ * @date 2022/2/14
  */
 public class Test_HtmlParse {
 

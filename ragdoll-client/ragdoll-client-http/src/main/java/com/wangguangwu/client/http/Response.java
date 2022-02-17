@@ -1,9 +1,11 @@
 package com.wangguangwu.client.http;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 import static com.wangguangwu.client.entity.Commons.CONTENT_LENGTH;
 import static com.wangguangwu.client.entity.Symbol.*;
+import static com.wangguangwu.client.utils.FileUtil.saveData2File;
 import static com.wangguangwu.client.utils.StringUtil.map2String;
 
 /**
@@ -26,12 +29,18 @@ import static com.wangguangwu.client.utils.StringUtil.map2String;
 @Slf4j
 @Getter
 @Setter
+@NoArgsConstructor
 public class Response {
 
     /**
      * inputStream
      */
     private InputStream inputStream;
+
+    /**
+     * save file name
+     */
+    private String fileName;
 
     /**
      * protocol
@@ -54,9 +63,29 @@ public class Response {
     private final Map<String, String> headerMap = new HashMap<>();
 
     /**
+     * whole response
+     */
+    private String wholeResponse;
+
+    /**
+     * response line
+     */
+    private String responseLine;
+
+    /**
+     * response header
+     */
+    private String responseHeader;
+
+    /**
+     * response empty Line
+     */
+    private String responseEmptyLine = "\r\n";
+
+    /**
      * response body
      */
-    private StringBuilder responseBody = new StringBuilder();
+    private String responseBody;
 
     /**
      * the value to the key Content-Length
@@ -72,6 +101,7 @@ public class Response {
      * length of the firstRead's part of response body
      */
     private int remainingLength;
+
 
     /**
      * inputStream constructor
@@ -110,11 +140,18 @@ public class Response {
                     // copy data
                     System.arraycopy(firstRead, index, subBytes, 0, length);
                     // responseLine, such as HTTP/1.1 200 OK
-                    String[] responseLine = new String(subBytes, StandardCharsets.UTF_8).split(SPACE);
-                    protocol = responseLine[0];
-                    code = Integer.parseInt(responseLine[1]);
-                    description = responseLine[2];
+                    responseLine = new String(subBytes, StandardCharsets.UTF_8);
+
+                    // split with " "
+                    String[] responseLineSpilt = responseLine.split(SPACE);
+                    protocol = responseLineSpilt[0];
+                    code = Integer.parseInt(responseLineSpilt[1]);
+                    description = responseLineSpilt[2];
+
+                    log.info("responseLine: {}", responseLine);
                     parseResponseLine = false;
+                    // next line
+                    index = i + 2;
                     continue;
                 }
 
@@ -137,8 +174,10 @@ public class Response {
                     remainContent = new byte[remainingLength];
                     // copy data
                     System.arraycopy(firstRead, index, remainContent, 0, remainingLength);
+                    // response header
+                    responseHeader = map2String(headerMap);
 
-                    log.info("responseHeader: {}", map2String(headerMap));
+                    log.info("responseHeader: \r\n{}", responseHeader);
                     log.info("responseBesidesBodyLength: {}", responseBesidesBodyLength);
                     log.info("remainingLength: {}", remainingLength);
                     break;
@@ -161,9 +200,12 @@ public class Response {
 
         // response body content
         byte[] responseBodyContent = parseInputStream2Bytes(responseBodyLength - remainingLength);
-
-        log.info("response body: {}", new String(remainContent, StandardCharsets.UTF_8)
-                + new String(responseBodyContent, StandardCharsets.UTF_8));
+        responseBody = new String(remainContent, StandardCharsets.UTF_8)
+                + new String(responseBodyContent, StandardCharsets.UTF_8);
+        log.info("responseBody: \r\n{}", responseBody);
+        // save data to file
+        wholeResponse = responseLine + responseHeader + responseEmptyLine + responseBody;
+        saveData2File(handleFileName(), wholeResponse);
     }
 
     /**
@@ -191,4 +233,28 @@ public class Response {
         return bytes;
     }
 
+    /**
+     * ex: www.baidu.com
+     *
+     * @return baidu_1645077418458
+     */
+    private String handleFileName() {
+        int index1 = fileName.indexOf(POINT);
+        int index2 = fileName.lastIndexOf(POINT);
+        fileName = fileName.substring(index1 + 1, index2) + "_" + System.currentTimeMillis();
+        return fileName;
+    }
+
+    public static void main(String[] args) {
+        String a ="Cache-Control: no-cache\n" +
+                "process-stage: Stage-Outbound\n" +
+                "Connection: keep-alive\n" +
+                "Set-Cookie: lastCity=101210100; path=/; domain=.zhipin.com; Max-Age=31536000; Expires=Fri, 17-Feb-2023 06:26:10 GMT\n" +
+                "Vary: Accept-Encoding\n" +
+                "Content-Length: 392116\n" +
+                "Date: Thu, 17 Feb 2022 06:26:10 GMT\n" +
+                "Content-Language: zh-CN\n" +
+                "Content-Type: text/html;charset=utf-8";
+        System.out.println(a.getBytes(StandardCharsets.UTF_8).length);
+    }
 }

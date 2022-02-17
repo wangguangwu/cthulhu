@@ -12,9 +12,10 @@ import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
 import static com.wangguangwu.client.utils.StringUtil.map2String;
 
 /**
+ * StringUtil test class.
+ *
  * @author wangguangwu
- * @date 2022/2/14 6:37 AM
- * @description StringUtil 测试类
+ * @date 2022/2/14
  */
 public class Test_StringUtil {
 

@@ -55,6 +55,7 @@ public class CrawlerImpl implements Crawler {
 
             // parse response
             Response response = new Response(in);
+            response.setFileName(host);
             response.parse();
 
             long endTime = System.currentTimeMillis();
