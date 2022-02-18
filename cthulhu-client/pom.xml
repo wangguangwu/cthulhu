@@ -3,13 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <!--    <groupId>com.2020</groupId>-->
+    <!--    groupId需要为Sonatype的groupId-->
     <groupId>com.wangguangwu</groupId>
     <artifactId>cthulhu-client</artifactId>
     <version>1.0.0</version>
+    <!--    快照版本-->
+    <!--    <version>1.0.0-SNAPSHOT</version>-->
+    <!--    正式版本-->
+    <!--    <version>1.0.0-RELEASE</version>-->
     <packaging>pom</packaging>
-
     <name>${project.groupId}:${project.artifactId}</name>
+    <!--    <name>2020</name>-->
     <description>a mini http client</description>
     <url>https://github.com/wangguangwu/cthulhu</url>
 
@@ -17,13 +22,27 @@
         <module>cthulhu-client-http</module>
     </modules>
 
+    <!-- 许可证信息 -->
     <licenses>
+        <!-- Apache许可证 -->
         <license>
-            <name>The Apache License, Version 2.0</name>
+            <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
+        <!-- MIT许可证 -->
+        <!--         <license>
+                    <name>MIT License</name>
+                    <url>http://www.opensource.org/licenses/mit-license.php</url>
+                </license> -->
     </licenses>
 
+    <!-- SCM信息 ->  -->
+    <scm>
+        <connection>scm:git:https://github.com/wangguangwu/cthulhu.git</connection>
+        <developerConnection>scm:git:https://github.com/wangguangwu/cthulhu.git</developerConnection>
+        <url>https://github.com/wangguangwu/cthulhu.git</url>
+    </scm>
+    <!-- 开发者信息 -->
     <developers>
         <developer>
             <name>wangguangwu</name>
@@ -33,136 +52,117 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <compilerArguments>
+                        <verbose/>
+                        <bootclasspath>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</bootclasspath>
+                        <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--  必须配置GPG插件用于使用以下配置对组件进行签名 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
 
-    <scm>
-        <connection>scm:git:https://github.com/wangguangwu/cthulhu.git</connection>
-        <developerConnection>scm:git:https://github.com/wangguangwu/cthulhu.git</developerConnection>
-        <url>https://github.com/wangguangwu/cthulhu</url>
-    </scm>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.2.1</version>
+            </plugin>
+        </plugins>
+    </build>
+    <repositories>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
     <distributionManagement>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                    <include>**/*.factories</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar-no-fork</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.7</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>2.5.3</version>
-                        <configuration>
-                            <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <useReleaseProfile>false</useReleaseProfile>
-                            <releaseProfiles>release</releaseProfiles>
-                            <goals>deploy</goals>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback-classic.version>1.2.5</logback-classic.version>
         <lombok.version>1.18.22</lombok.version>
         <junit.version>5.8.2</junit.version>
         <jsoup.version>1.14.3</jsoup.version>
+
     </properties>
 
     <dependencyManagement>
@@ -193,5 +193,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 
 </project>
