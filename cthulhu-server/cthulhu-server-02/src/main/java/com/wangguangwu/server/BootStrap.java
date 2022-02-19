@@ -2,6 +2,7 @@ package com.wangguangwu.server;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,24 +11,34 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * Startup class.
+ *
  * @author wangguangwu
- * @date 2022/2/5 10:48 PM
- * @description tomcat 启动类
  */
+@Slf4j
 @Getter
 @Setter
 public class BootStrap {
 
+    /**
+     * the port number of the socket is listening on.
+     */
     private int port = 8080;
 
     /**
-     * tomcat 的程序启动入口
+     * localHost.
+     */
+    private String localHost = "127.0.0.1";
+
+    /**
+     * start server.
      *
      * @param args args
      */
     public static void main(String[] args) {
         BootStrap bootStrap = new BootStrap();
         try {
+            // start server
             bootStrap.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,34 +46,35 @@ public class BootStrap {
     }
 
     /**
-     * tomcat 启动需要初始化展开的一些操作
-     * 完成 tomcat 2.0 版本
-     * 需求：封装 Request 和 Response 对象，返回 html 静态资源文件
+     * create a serverSocket bind with localHost and listen on port.
+     * create request and response objects.
+     * return html static resource files.
      */
     @SuppressWarnings("InfiniteLoopStatement")
     public void start() throws IOException {
-        // 创建一个服务端 socket
+        // create a serverSocket
         ServerSocket serverSocket =
-                new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
-        System.out.println("======>>tomcat start on port " + port);
+                new ServerSocket(port, 1, InetAddress.getByName(localHost));
+        log.info("Cthulhu-server start on port: {}", port);
 
         while (true) {
-            // 调用 accept 方法获取 socket 实例
+            // get client socket
             Socket socket = serverSocket.accept();
-            InputStream inputStream = socket.getInputStream();
 
-            // 封装 Request 对象和 Response 对象
-            Request request = new Request(inputStream);
-            // google 的请求
+            // create a request to parse socketInputStream
+            Request request = new Request(socket.getInputStream());
+            // request from google
             if ("/favicon.ico".equals(request.getUrl())) {
                 continue;
             }
-            Response response = new Response(socket.getOutputStream());
 
+            // create a response to write http response to socketOutputStream
+            Response response = new Response(socket.getOutputStream());
+            // write html to response
             response.outputHtml(request.getUrl());
+            // close socket
             socket.close();
         }
-
     }
 
 }

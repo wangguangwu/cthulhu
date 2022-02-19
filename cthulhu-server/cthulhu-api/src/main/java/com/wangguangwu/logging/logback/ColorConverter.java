@@ -1,12 +1,11 @@
-package com.wangguangwu.client.logging.logback;
+package com.wangguangwu.logging.logback;
 
 import java.util.Map;
 
-
-import com.wangguangwu.client.logging.ansi.AnsiColor;
-import com.wangguangwu.client.logging.ansi.AnsiElement;
-import com.wangguangwu.client.logging.ansi.AnsiOutput;
-import com.wangguangwu.client.logging.ansi.AnsiStyle;
+import com.wangguangwu.logging.ansi.AnsiColor;
+import com.wangguangwu.logging.ansi.AnsiElement;
+import com.wangguangwu.logging.ansi.AnsiOutput;
+import com.wangguangwu.logging.ansi.AnsiStyle;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;

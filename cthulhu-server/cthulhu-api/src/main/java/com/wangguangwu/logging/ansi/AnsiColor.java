@@ -1,4 +1,4 @@
-package com.wangguangwu.client.logging.ansi;
+package com.wangguangwu.logging.ansi;
 
 
 /**
@@ -11,7 +11,7 @@ package com.wangguangwu.client.logging.ansi;
 public enum AnsiColor implements AnsiElement {
 
     /**
-     * different colors.
+     * different ansi color.
      */
     DEFAULT("39"),
 

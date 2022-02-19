@@ -1,8 +1,8 @@
-package com.wangguangwu.client.logging.ansi;
+package com.wangguangwu.logging.ansi;
 
 
 /**
- * An ANSI encodeAble element.
+ * An ANSI encodable element.
  *
  * @author Phillip Webb
  * @since 1.0.0

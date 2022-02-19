@@ -10,12 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cthulhu-server-03</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <cthulhu-server-api>1.0.0</cthulhu-server-api>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.wangguangwu</groupId>
             <artifactId>cthulhu-api</artifactId>
-            <version>1.0.0</version>
+            <version>${cthulhu-server-api}</version>
         </dependency>
     </dependencies>
 </project>

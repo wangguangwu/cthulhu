@@ -6,9 +6,9 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 /**
+ * Some methods to operate static resource.
+ *
  * @author wangguangwu
- * @date 2022/2/5 11:26 PM
- * @description 静态资源工具类
  */
 public class StaticResourceUtil {
 

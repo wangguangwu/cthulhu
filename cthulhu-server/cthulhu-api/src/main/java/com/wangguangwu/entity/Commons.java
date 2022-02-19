@@ -1,14 +1,20 @@
 package com.wangguangwu.entity;
 
 /**
+ * Common variable names。
+ *
  * @author wangguangwu
- * @date 2022/2/6 12:09 AM
- * @description 常用的变量名称
  */
 public class Commons {
 
+    /**
+     * GET
+     */
     public static final String GET = "GET";
 
+    /**
+     * POST
+     */
     public static final String POST = "POST";
 
 }

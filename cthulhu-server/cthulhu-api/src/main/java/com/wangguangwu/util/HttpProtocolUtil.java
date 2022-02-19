@@ -1,14 +1,14 @@
 package com.wangguangwu.util;
 
 /**
+ * Http protocol tool classes.
+ *
  * @author wangguangwu
- * @date 2022/2/5 1:58 AM
- * @description http 协议工具类，主要是提供响应头信息，这里我们只提供 200 和 404 的响应头信息
  */
 public class HttpProtocolUtil {
 
     /**
-     * 为响应码为 200 的响应提供响应头信息
+     * provide response header information for response with response code 200.
      *
      * @param contentLength 响应内容长度
      * @return string
@@ -21,7 +21,7 @@ public class HttpProtocolUtil {
     }
 
     /**
-     * 为响应码为 404 的响应提供响应头信息
+     * provide response header information for response with response code 404.
      *
      * @return string
      */

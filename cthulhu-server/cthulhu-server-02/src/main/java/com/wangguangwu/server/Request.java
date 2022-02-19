@@ -7,33 +7,35 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * Parse http request.
+ *
  * @author wangguangwu
- * @date 2022/2/5 11:03 PM
- * @description 将请求信息封装为 Request 对象（根据 InputStream 输入流封装）
  */
 @Getter
 @Setter
 public class Request {
 
     /**
-     * 请求方式，比如 GET/POST
+     * request method, such as GET/POST.
      */
     private String method;
 
     /**
-     * url，比如 "/" 或者 "/index.html"
+     * request url, such as "/" or "/index.html".
      */
     private String url;
 
     /**
-     * 输入流，其他属性从输入流中解析出来
+     * inputStream.
+     * <p>
+     * get information by parse the inputStream.
      */
     private InputStream inputStream;
 
     /**
-     * 构造器，输入流传入
+     * inputStream constructor.
      *
-     * @param inputStream 输入流
+     * @param inputStream socketInputStream
      */
     public Request(InputStream inputStream) throws IOException {
         this.inputStream = inputStream;
