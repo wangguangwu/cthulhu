@@ -133,8 +133,10 @@
             </plugin>
         </plugins>
     </build>
+
     <repositories>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>public</id>
