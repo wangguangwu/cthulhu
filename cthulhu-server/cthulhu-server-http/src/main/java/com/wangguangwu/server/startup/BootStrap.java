@@ -1,15 +1,16 @@
-package com.wangguangwu.server;
+package com.wangguangwu.server.startup;
 
-import com.wangguangwu.server.servlet.impl.HttpServlet;
 import com.wangguangwu.server.thread.RequestProcessor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+import javax.servlet.http.HttpServlet;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -17,53 +18,67 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 /**
+ * Start a server to listen on a port and respond to request.
+ *
  * @author wangguangwu
- * @date 2022/2/5 11:58 PM
- * @description tomcat 启动类
  */
+@Slf4j
 @Getter
 @Setter
 public class BootStrap {
 
+    /**
+     * the port which the serverSocket is listen on.
+     */
     private int port = 8080;
 
     /**
-     * tomcat 的程序启动入口
+     * the host which the serverSocket is binding with.
+     */
+    private String host = "127.0.0.1";
+
+    /**
+     * a map that saves the mapping between url and the corresponding servlet.
+     */
+    private Map<String, HttpServlet> servletMap = new HashMap<>();
+
+    /**
+     * project boot entrance.
      *
      * @param args args
      */
     public static void main(String[] args) {
         BootStrap bootStrap = new BootStrap();
         try {
+            // start the project
             bootStrap.start();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("BootStrap main error:\r\n", e);
         }
     }
 
     /**
-     * tomcat 启动需要初始化展开的一些操作
-     * 完成 tomcat 3.0 版本
-     * 需求：可以请求动态资源（Servlet）
+     * initialize a server.
      */
     @SuppressWarnings("InfiniteLoopStatement")
     public void start() throws Exception {
-        // 加载解析相关的配置，web.xml
+        // load and parse related configuration, such as web.xml
         loadServlet();
 
-        // 定义一个线程池
+        // create a threadPoolExecutor
         ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
-        // 创建一个服务端 socket
+        // create a serverSocket
         ServerSocket serverSocket =
                 new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
-        System.out.println("======>>tomcat start on port " + port);
+        log.info("server start on host: {}, port: {}", host, port);
 
-        // 多线程改造 使用线程池
         while (true) {
+            // create client socket
             Socket socket = serverSocket.accept();
             RequestProcessor requestProcessor = new RequestProcessor(socket, servletMap);
             threadPoolExecutor.execute(requestProcessor);
@@ -71,11 +86,12 @@ public class BootStrap {
     }
 
     /**
-     * 生成一个线程池
+     * create a threadPoolExecutor.
      *
-     * @return 线程池
+     * @return a threadPoolExecutor
      */
     private ThreadPoolExecutor getThreadPoolExecutor() {
+        // core parameters
         int corePoolSize = 10;
         int maximumPoolSize = 50;
         long keepAliveTime = 100L;
@@ -95,15 +111,11 @@ public class BootStrap {
     }
 
     /**
-     * 创建一个 mpa，保存 url 和 servlet 的映射关系
-     */
-    private Map<String, HttpServlet> servletMap = new HashMap<>();
-
-    /**
-     * 使用 dom4j 加载解析 web.xml，初始化 Servlet
+     * use dom4j to load and parse web.xml.
      */
     private void loadServlet() {
-        // 读取文件
+        // read the file which named "web.xml" in the resources directory
+        log.info("load web.xml: {}", Objects.requireNonNull(this.getClass().getClassLoader().getResource("web.xml")).getPath());
         InputStream resourceAsStream =
                 this.getClass().getClassLoader().getResourceAsStream("web.xml");
         SAXReader saxReader = new SAXReader();
@@ -121,21 +133,22 @@ public class BootStrap {
                         Element servletClassElement = (Element) node.selectSingleNode("servlet-class");
                         String servletClass = servletClassElement.getStringValue();
 
-                        // 根据 servlet-name 的值找到 url-pattern
+                        // find url-pattern based on the value of servlet-name
                         Element servletMapping =
                                 (Element) rootElement.selectSingleNode("/web-app/servlet-mapping[servlet-name='" + servletName + "']");
                         // /wang
                         String urlPattern = servletMapping.selectSingleNode("url-pattern").getStringValue();
                         try {
-                            // 保存映射关系
+                            // save the mapping relationship between url-pattern and the corresponding instance
+                            log.info("servletClass: {}", servletClass);
                             servletMap.put(urlPattern, (HttpServlet) Class.forName(servletClass).newInstance());
                         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                            e.printStackTrace();
+                            log.error("BootStrap loadServlet error: \r\n", e);
                         }
                     }
             );
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.error("BootStrap loadServlet error: \r\n", e);
         }
     }
 

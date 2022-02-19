@@ -10,7 +10,7 @@ public class HttpProtocolUtil {
     /**
      * provide response header information for response with response code 200.
      *
-     * @param contentLength 响应内容长度
+     * @param contentLength responseBody length
      * @return string
      */
     public static String getHttp200(long contentLength) {

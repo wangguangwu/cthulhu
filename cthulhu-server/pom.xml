@@ -11,9 +11,7 @@
 
     <modules>
         <module>cthulhu-api</module>
-        <module>cthulhu-server-01</module>
-        <module>cthulhu-server-02</module>
-        <module>cthulhu-server-03</module>
+        <module>cthulhu-server-http</module>
     </modules>
 
     <properties>
@@ -24,6 +22,7 @@
         <jaxen.version>1.2.0</jaxen.version>
         <junit-jupiter>5.8.2</junit-jupiter>
         <logback-classic.version>1.2.5</logback-classic.version>
+        <servlet-api>3.0-alpha-1</servlet-api>
     </properties>
 
     <dependencies>
@@ -59,6 +58,12 @@
             <version>${logback-classic.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${servlet-api}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

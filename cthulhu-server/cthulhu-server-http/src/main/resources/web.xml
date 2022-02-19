@@ -2,7 +2,7 @@
 <web-app>
     <servlet>
         <servlet-name>wangguangwu</servlet-name>
-        <servlet-class>com.wangguangwu.server.servlet.impl.WangServlet</servlet-class>
+        <servlet-class>com.wangguangwu.server.service.WangServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

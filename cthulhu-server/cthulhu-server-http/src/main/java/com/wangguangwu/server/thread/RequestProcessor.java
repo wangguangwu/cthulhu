@@ -1,24 +1,37 @@
 package com.wangguangwu.server.thread;
 
-import com.wangguangwu.server.Request;
-import com.wangguangwu.server.Response;
-import com.wangguangwu.server.servlet.impl.HttpServlet;
+import com.wangguangwu.server.http.Request;
+import com.wangguangwu.server.http.Response;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.InputStream;
+import javax.servlet.http.HttpServlet;
 import java.net.Socket;
 import java.util.Map;
 
 /**
+ * Parse http request.
+ *
  * @author wangguangwu
- * @date 2022/2/6 3:48 PM
- * @description 请求处理器
  */
+@Slf4j
 public class RequestProcessor extends Thread {
 
+    /**
+     * socket.
+     */
     private final Socket socket;
 
+    /**
+     * a map that saves the mapping between url and the corresponding servlet.
+     */
     private final Map<String, HttpServlet> servletMap;
 
+    /**
+     * socket and servletMap constructor.
+     *
+     * @param socket     socket
+     * @param servletMap servletMap
+     */
     public RequestProcessor(Socket socket, Map<String, HttpServlet> servletMap) {
         this.socket = socket;
         this.servletMap = servletMap;
@@ -28,22 +41,20 @@ public class RequestProcessor extends Thread {
     @Override
     public void run() {
         try {
-            InputStream inputStream = socket.getInputStream();
-
-            // 封装 Request 对象和 Response 对象
-            Request request = new Request(inputStream);
+            // parse http request and http response
+            Request request = new Request(socket.getInputStream());
             Response response = new Response(socket.getOutputStream());
 
             if (servletMap.get(request.getUrl()) == null) {
-                // 静态资源处理
+                // static resource handling
                 response.outputHtml(request.getUrl());
             } else {
-                // 动态资源处理
+                // dynamic resource handling
                 HttpServlet httpServlet = servletMap.get(request.getUrl());
                 httpServlet.service(request, response);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("RequestProcessor run error: \r\n", e);
         }
     }
 }
