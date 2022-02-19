@@ -1,9 +1,9 @@
 package com.wangguangwu.client.entity;
 
 /**
+ * commonly symbol.
+ *
  * @author wangguangwu
- * @date 2022/2/14 7:36 AM
- * @description 常用符号
  */
 public class Symbol {
 

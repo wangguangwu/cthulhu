@@ -14,7 +14,6 @@ import static com.wangguangwu.client.entity.Symbol.SLASH;
  * some methods to operate file.
  *
  * @author wangguangwu
- * @date 2022/2/14
  */
 @Slf4j
 public class FileUtil {

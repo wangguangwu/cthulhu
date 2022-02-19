@@ -24,7 +24,6 @@ import static com.wangguangwu.client.utils.StringUtil.map2String;
  * set a larger array to receive the response body (the capacity we will need to calculate).
  *
  * @author wangguangwu
- * @date 2022/2/16
  */
 @Slf4j
 @Getter

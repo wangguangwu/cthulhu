@@ -16,7 +16,6 @@ import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
  * parse response from the website.
  *
  * @author wangguangwu
- * @date 2022/2/12
  */
 @Slf4j
 public class CrawlerImpl implements Crawler {

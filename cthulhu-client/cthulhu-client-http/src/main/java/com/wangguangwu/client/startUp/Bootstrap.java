@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
  * parse response from the website.
  *
  * @author wangguangwu
- * @date 2022/2/12
  */
 @Slf4j
 @Getter

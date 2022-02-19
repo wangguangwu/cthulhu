@@ -10,7 +10,6 @@ import static com.wangguangwu.client.entity.Symbol.*;
  * some methods to operate string.
  *
  * @author wangguangwu
- * @date 2022/2/14 6:26 AM
  */
 public class StringUtil {
 

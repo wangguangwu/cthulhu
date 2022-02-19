@@ -5,7 +5,6 @@ package com.wangguangwu.client.service;
  * parse response from the website.
  *
  * @author wangguangwu
- * @date 2022/2/12
  */
 
 public interface Crawler {

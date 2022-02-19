@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
  * some methods to operate html.
  *
  * @author wangguangwu
- * @date 2022/2/13
  */
 public class HtmlParse {
 
