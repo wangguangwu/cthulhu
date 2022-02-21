@@ -3,30 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <!--    <groupId>com.2020</groupId>-->
+    <!--    groupId需要为Sonatype的groupId-->
     <groupId>com.wangguangwu</groupId>
     <artifactId>cthulhu-server</artifactId>
-    <packaging>pom</packaging>
     <version>1.0.1-SNAPSHOT</version>
+    <!--    快照版本-->
+    <!--    <version>1.0.0-SNAPSHOT</version>-->
+    <!--    正式版本-->
+    <!--    <version>1.0.0-RELEASE</version>-->
+    <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>a mini http servlet</description>
+    <!--    <name>2020</name>-->
+    <description>a mini http client</description>
     <url>https://github.com/wangguangwu/cthulhu</url>
 
     <modules>
         <module>cthulhu-server-core</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <java.version>17</java.version>
-        <lombok.version>1.18.22</lombok.version>
-        <dom4j.version>2.1.3</dom4j.version>
-        <jaxen.version>1.2.0</jaxen.version>
-        <junit-jupiter>5.8.2</junit-jupiter>
-        <logback-classic.version>1.2.5</logback-classic.version>
-        <servlet-api>3.0-alpha-1</servlet-api>
-    </properties>
 
     <!-- 许可证信息 -->
     <licenses>
@@ -48,7 +42,6 @@
         <developerConnection>scm:git:https://github.com/wangguangwu/cthulhu.git</developerConnection>
         <url>https://github.com/wangguangwu/cthulhu.git</url>
     </scm>
-
     <!-- 开发者信息 -->
     <developers>
         <developer>
@@ -60,30 +53,35 @@
         </developer>
     </developers>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <logback-classic.version>1.2.5</logback-classic.version>
+        <lombok.version>1.18.22</lombok.version>
+        <junit.version>5.8.2</junit.version>
+        <jsoup.version>1.14.3</jsoup.version>
+        <java.version>17</java.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-project-info-reports-plugin.version>3.2.1</maven-project-info-reports-plugin.version>
+        <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>2.7.1</maven-surefire-plugin.version>
+        <servlet-api.version>3.0-alpha-1</servlet-api.version>
+        <dom4j.version>2.1.3</dom4j.version>
+    </properties>
+
+    <repositories/>
+
     <profiles>
         <profile>
             <id>cthulhu-server</id>
             <build>
                 <plugins>
-                    <!-- GPG -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.7.1</version>
+                        <version>${maven-surefire-plugin.version}</version>
                         <configuration>
                             <testFailureIgnore>true</testFailureIgnore>
                         </configuration>
@@ -91,7 +89,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.0</version>
+                        <version>${maven-compiler-plugin.version}</version>
                         <configuration>
                             <source>${java.version}</source>
                             <target>${java.version}</target>
@@ -105,7 +103,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>${maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -118,7 +116,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>${maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -135,7 +133,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -149,13 +147,13 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-site-plugin</artifactId>
-                        <version>3.7.1</version>
+                        <version>${maven-site-plugin.version}</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>${maven-project-info-reports-plugin.version}</version>
                     </plugin>
                 </plugins>
             </build>
@@ -170,11 +168,7 @@
                 </repository>
             </distributionManagement>
         </profile>
-
     </profiles>
-
-    <repositories>
-    </repositories>
 
     <pluginRepositories>
         <pluginRepository>
@@ -190,45 +184,46 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit-jupiter}</version>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>${dom4j.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-            <version>${jaxen.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+                <scope>compile</scope>
+            </dependency>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>${servlet-api}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+            <dependency>
+                <groupId>org.dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
 </project>
