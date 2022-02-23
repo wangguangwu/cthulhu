@@ -100,6 +100,7 @@ public class Response {
      */
     private int remainingLength;
 
+    private int bufferSize;
 
     /**
      * inputStream constructor
@@ -113,10 +114,10 @@ public class Response {
     /**
      * parse the response.
      */
-    public void parse() {
+    public Map<String, String> parse() {
 
         // response line and header and empty line
-        byte[] firstRead = parseInputStream2Bytes(1024);
+        byte[] firstRead = parseInputStream2Bytes(bufferSize);
 
         // whether the responseLine has been readed
         boolean parseResponseLine = true;
@@ -206,6 +207,10 @@ public class Response {
         handleFileName();
         saveData2File(fileName + "_responseBody", responseBody);
         saveData2File(fileName + "_response", wholeResponse);
+        Map<String, String> responseMap = new HashMap<>(2);
+        responseMap.put("response", wholeResponse);
+        responseMap.put("responseBody", responseBody);
+        return responseMap;
     }
 
     /**

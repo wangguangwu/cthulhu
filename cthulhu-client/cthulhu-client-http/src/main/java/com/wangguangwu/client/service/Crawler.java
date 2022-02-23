@@ -1,5 +1,7 @@
 package com.wangguangwu.client.service;
 
+import java.util.Map;
+
 /**
  * visit the website corresponding to the url
  * parse response from the website.
@@ -12,10 +14,17 @@ public interface Crawler {
     /**
      * visit the website corresponding to the url
      * parse response from the website.
-     *
-     * @param url  url
+     *  @param url  url
      * @param port port
+     * @return map
      */
-    void crawler(String url, int port);
+    Map<String, String> crawler(String url, int port);
+
+    /**
+     * get the robot's protocol of the specified website.
+     *
+     * @param host website domain
+     */
+    void parseRobotsProtocol(String host);
 
 }

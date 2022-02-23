@@ -1,4 +1,4 @@
-package com.wangguangwu.client.startUp;
+package com.wangguangwu.client.startup;
 
 import com.wangguangwu.client.service.Crawler;
 import com.wangguangwu.client.service.impl.CrawlerImpl;
@@ -19,7 +19,7 @@ public class Bootstrap {
 
     private int port = 443;
 
-    private String url = "www.zhipin.com/hangzhou/";
+    private String url = "www.zhipin.com/robots.txt";
 
     public static void main(String[] args) {
         log.info("client is running...");
@@ -30,6 +30,8 @@ public class Bootstrap {
 
     private void start() {
         Crawler crawler = new CrawlerImpl();
-        crawler.crawler(url, port);
+        // get the robot's protocol of the specified website
+        crawler.parseRobotsProtocol("www.zhipin.com");
+//        crawler.crawler(url, port);
     }
 }
