@@ -228,7 +228,7 @@ public class Response {
                 }
             }
         } catch (IOException e) {
-            log.error("Response parseInputStream2Bytes error: \r\n", e);
+            log.error("Response parseInputStream2Bytes error: ", e);
         }
         return bytes;
     }

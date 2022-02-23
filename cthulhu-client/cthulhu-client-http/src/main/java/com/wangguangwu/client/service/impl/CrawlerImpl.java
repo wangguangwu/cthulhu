@@ -61,7 +61,7 @@ public class CrawlerImpl implements Crawler {
             log.info("start time: {}, end time: {}, cost time: {}", startTime, endTime, endTime - startTime);
 
         } catch (IOException e) {
-            log.error("CrawlerImpl Crawler error: \r\n", e);
+            log.error("CrawlerImpl Crawler error: ", e);
         }
     }
 }

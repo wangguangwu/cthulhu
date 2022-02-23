@@ -46,7 +46,7 @@ public class FileUtil {
             writer.write(data);
             log.info("write data to file: {}", filePath);
         } catch (IOException e) {
-            log.error("FileUtil saveData2File error: \r\n", e);
+            log.error("FileUtil saveData2File error: ", e);
         }
     }
 
@@ -76,7 +76,7 @@ public class FileUtil {
                 log.info("create file: {}", filePath);
             }
         } catch (IOException e) {
-            log.error("FileUtil createFile error: \r\n", e);
+            log.error("FileUtil createFile error: ", e);
         }
         return filePath;
     }

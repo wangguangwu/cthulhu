@@ -57,7 +57,7 @@ public class BootStrap {
             // start the project
             bootStrap.start();
         } catch (Exception e) {
-            log.error("BootStrap main error:\r\n", e);
+            log.error("BootStrap main error:", e);
         }
     }
 
@@ -143,12 +143,12 @@ public class BootStrap {
                             log.info("servletClass: {}", servletClass);
                             servletMap.put(urlPattern, (HttpServlet) Class.forName(servletClass).newInstance());
                         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                            log.error("BootStrap loadServlet error: \r\n", e);
+                            log.error("BootStrap loadServlet error: ", e);
                         }
                     }
             );
         } catch (DocumentException e) {
-            log.error("BootStrap loadServlet error: \r\n", e);
+            log.error("BootStrap loadServlet error: ", e);
         }
     }
 

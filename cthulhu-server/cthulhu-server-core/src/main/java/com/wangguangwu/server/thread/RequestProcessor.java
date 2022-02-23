@@ -54,7 +54,7 @@ public class RequestProcessor extends Thread {
                 httpServlet.service(request, response);
             }
         } catch (Exception e) {
-            log.error("RequestProcessor run error: \r\n", e);
+            log.error("RequestProcessor run error: ", e);
         }
     }
 }
