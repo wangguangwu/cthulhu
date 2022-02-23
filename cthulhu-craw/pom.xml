@@ -47,6 +47,7 @@
             <groupId>com.wangguangwu</groupId>
             <artifactId>cthulhu-client</artifactId>
             <version>${cthulhu-client.version}</version>
+            <type>pom</type>
         </dependency>
 
         <dependency>
