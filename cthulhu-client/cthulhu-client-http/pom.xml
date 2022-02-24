@@ -41,11 +41,13 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
         </dependency>
+<!--        todo 这个项目不要用 spring-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <scope>compile</scope>
         </dependency>
+<!--        todo 工具包用 HuTool 系列-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
