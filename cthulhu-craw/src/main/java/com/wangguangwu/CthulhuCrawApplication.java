@@ -1,7 +1,6 @@
 package com.wangguangwu;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CthulhuCrawApplication {
 
     public static void main(String[] args) {
-        // Kill old process
-        killSelf();
-
         SpringApplication.run(CthulhuCrawApplication.class, args);
     }
 

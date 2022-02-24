@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+import com.wangguangwu.CthulhuCrawApplication;
+
 /**
  * Project entry.
  *
@@ -27,8 +29,11 @@ public class CthulhuController {
     @RequestMapping("restart")
     public String restart() throws IOException {
         // the absolute path of the script on the server
-        String bashCommand = "bash /root/workspace/deploy.sh";
-        Runtime.getRuntime().exec(bashCommand);
+//        String bashCommand = "bash /root/workspace/deploy.sh";
+//        Runtime.getRuntime().exec(bashCommand);
+
+        // todo test
+        CthulhuCrawApplication.killSelf();
         return "Restart server success";
     }
 
