@@ -25,28 +25,11 @@ public class CthulhuController {
     }
 
     @RequestMapping("restart")
-    public String restart() {
+    public String restart() throws IOException {
         // the absolute path of the script on the server
-        String bashCommand = "/root/workspace/deploy.sh";
-        Runtime runtime = Runtime.getRuntime();
-        int status = 0;
-        String response = "restart server success";
-        try {
-            // call the script
-            Process pro = runtime.exec(bashCommand);
-            // call waitFor to wait for the script finish executing
-            // otherwise, the script will fail
-            status = pro.waitFor();
-        } catch (InterruptedException | IOException e) {
-            log.error("CthulhuController restart error: ", e);
-        }
-        // 0: the code represent the script is executed successfully
-        if (status != 0) {
-            response = "restart server error";
-            log.error(response);
-        }
-        log.info(response);
-        return response;
+        String bashCommand = "bash /root/workspace/deploy.sh";
+        Runtime.getRuntime().exec(bashCommand);
+        return "Restart server success";
     }
 
 }
