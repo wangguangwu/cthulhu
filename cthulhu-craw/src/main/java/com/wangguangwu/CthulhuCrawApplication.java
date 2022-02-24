@@ -55,5 +55,6 @@ public class CthulhuCrawApplication {
             RuntimeUtil.exec("kill -9 " + pid);
         }
 
+        log.info("Kill self complete, my pid is [{}].", myPid);
     }
 }
