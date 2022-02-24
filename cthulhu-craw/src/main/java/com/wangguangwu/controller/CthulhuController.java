@@ -1,12 +1,12 @@
 package com.wangguangwu.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
-import com.wangguangwu.CthulhuCrawApplication;
+import cn.hutool.core.util.RuntimeUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Project entry.
@@ -27,13 +27,9 @@ public class CthulhuController {
     }
 
     @RequestMapping("restart")
-    public String restart() throws IOException {
-        // the absolute path of the script on the server
-//        String bashCommand = "bash /root/workspace/deploy.sh";
-//        Runtime.getRuntime().exec(bashCommand);
-
-        // todo test
-        CthulhuCrawApplication.killSelf();
+    public String restart() {
+        // The absolute path of the script on the server.
+        RuntimeUtil.exec("bash /root/workspace/deploy.sh");
         return "Restart server success";
     }
 
