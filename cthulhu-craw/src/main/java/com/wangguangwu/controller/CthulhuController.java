@@ -1,10 +1,9 @@
 package com.wangguangwu.controller;
 
-import java.io.InputStream;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +28,9 @@ public class CthulhuController {
     @RequestMapping("restart")
     public String restart() throws InterruptedException {
         // The absolute path of the script on the server.
-        RuntimeUtil.exec("bash /root/workspace/deploy.sh").waitFor();
+        Process exec = RuntimeUtil.exec("bash /root/workspace/deploy.sh");
+        log.info("outputStream: {}", IoUtil.read(exec.getInputStream()));
+        log.error("errorStream: {}", IoUtil.read(exec.getErrorStream()));
         return "Restart server success";
     }
 
