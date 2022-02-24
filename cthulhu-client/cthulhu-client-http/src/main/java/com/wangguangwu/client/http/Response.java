@@ -198,15 +198,18 @@ public class Response {
         }
 
         // response body content
-        byte[] responseBodyContent = parseInputStream2Bytes(responseBodyLength - remainingLength);
+        int responseBodyRemainLength = responseBodyLength - remainingLength;
+        if (responseBodyRemainLength < 0) {
+            return null;
+        }
+        byte[] responseBodyContent = parseInputStream2Bytes(responseBodyRemainLength);
         responseBody = new String(remainContent, StandardCharsets.UTF_8)
                 + new String(responseBodyContent, StandardCharsets.UTF_8);
         log.info("responseBody: \r\n{}", responseBody);
         // save data to file
         wholeResponse = responseLine + responseHeader + responseEmptyLine + responseBody;
         handleFileName();
-        saveData2File(fileName + "_responseBody", responseBody);
-        saveData2File(fileName + "_response", wholeResponse);
+        saveData2File(fileName, responseBody);
         Map<String, String> responseMap = new HashMap<>(2);
         responseMap.put("response", wholeResponse);
         responseMap.put("responseBody", responseBody);
@@ -239,12 +242,14 @@ public class Response {
     }
 
     /**
-     * ex: www.baidu.com ==> baidu
+     * ex: www.zhipin.com/robots.txt ==> zhipin/robots.txt
      */
     private void handleFileName() {
+        String tempFile = fileName.substring(fileName.indexOf(SLASH));
+        fileName = fileName.substring(0, fileName.indexOf(SLASH));
         int index1 = fileName.indexOf(POINT);
         int index2 = fileName.lastIndexOf(POINT);
-        fileName = fileName.substring(index1 + 1, index2);
+        fileName = fileName.substring(index1 + 1, index2) + tempFile;
     }
 
     public static void main(String[] args) {

@@ -3,16 +3,20 @@ package com.wangguangwu.client.service.impl;
 import com.wangguangwu.client.entity.Robot;
 import com.wangguangwu.client.http.Response;
 import com.wangguangwu.client.service.Crawler;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.wangguangwu.client.entity.Commons.*;
-import static com.wangguangwu.client.entity.Symbol.SEMICOLON;
-import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
+import static com.wangguangwu.client.entity.Http.*;
+import static com.wangguangwu.client.entity.Symbol.*;
 
 /**
  * visit the website corresponding to the url
@@ -21,18 +25,65 @@ import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
  * @author wangguangwu
  */
 @Slf4j
+@Getter
+@Setter
 public class CrawlerImpl implements Crawler {
 
+    /**
+     * url waiting to be crawled.
+     */
+    private static List<String> allWaitUrl = new ArrayList<>();
+
+    /**
+     * crawled url.
+     */
+    private static List<String> allOverUrl = new ArrayList<>();
+
+    /**
+     * Record the depth of all urls for crawling judgment.
+     */
+    private static Map<String, Integer> allUrlDepth = new HashMap<>();
+
+    /**
+     * Crawl depth。
+     */
+    private static int maxDepth = 2;
+
+
+    //===================================
+
+    private static String host;
+
+    private static String url;
+
+    private static int port;
+
+    private static String protocol;
+
+    List<Robot> robotList;
+
+    /**
+     * 正则表达式
+     */
+    Pattern p = Pattern.compile("<a .*href=.+</a>");
+
     @Override
-    public Map<String, String> crawler(String url, int port) {
-        // parse host and url
-        Map<String, String> hostAndUrl = parseHostAndUrl(url);
-        String host = hostAndUrl.get("host");
-        url = hostAndUrl.get("url");
+    public void work(String visitUrl) {
+        // parse host、url、http port
+        parseHostAndUrl(visitUrl);
+        // access robots.txt under the website
+        parseRobotsProtocol();
+        //
+
+    }
+
+    @Override
+    public Map<String, String> crawler(String visitUrl) {
         try (
                 // Https request need to use SSLSocketFactory to create socket
                 // Http request can directly create socket
-                Socket socket = SSLSocketFactory.getDefault().createSocket(host, port);
+                Socket socket = port == 443
+                        ? SSLSocketFactory.getDefault().createSocket(host, port) : new Socket(host, port);
                 // create bufferedWriter to write request to socket
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 // socketInputStream
@@ -45,7 +96,7 @@ public class CrawlerImpl implements Crawler {
             }
 
             // write request to socket
-            writer.write("GET " + url + " HTTP/1.1\r\n");
+            writer.write("GET " + visitUrl + " HTTP/1.1\r\n");
             writer.write("HOST: " + host + "\r\n");
             writer.write("Accept: */*\r\n");
             writer.write("Connection: Keep-Alive\r\n");
@@ -75,14 +126,16 @@ public class CrawlerImpl implements Crawler {
         return null;
     }
 
-    @Override
-    public void parseRobotsProtocol(String host) {
 
-        Map<String, String> responseMap = crawler(host + "/robots.txt", 443);
+    /**
+     * /**
+     * get the robot's protocol of the specified website.
+     */
+    private void parseRobotsProtocol() {
+
+        Map<String, String> responseMap = crawler("/robots.txt");
         // ex: User-agent: baidu\r\n Disallow: /\r\n\r\n
         List<String> list = Arrays.asList(responseMap.get("responseBody").split("\r\n\r\n"));
-
-        List<Robot> robotList = new ArrayList<>();
 
         list.forEach(data -> {
             Robot robot = new Robot();
@@ -113,7 +166,31 @@ public class CrawlerImpl implements Crawler {
             robot.setDisAllows(disAllows);
             robotList.add(robot);
         });
-
-        System.out.println(robotList.size());
     }
+
+    /**
+     * parse host、url、protocol and port.
+     *
+     * @param str host + url
+     */
+    public static void parseHostAndUrl(String str) {
+
+        if (str.startsWith(HTTPS_PROTOCOL_START)) {
+            protocol = HTTPS_PROTOCOL;
+            port = 443;
+        } else {
+            protocol = HTTP_PROTOCOL;
+            port = 80;
+        }
+
+        if (str.contains(DOUBLE_SLASH)) {
+            str = str.substring(str.indexOf(DOUBLE_SLASH) + 2);
+        }
+
+        host = str.contains(COM) ? str.substring(0, str.indexOf(COM) + 4) : str;
+        url = str.contains(COM) ? str.substring(str.indexOf(COM) + 4) : "";
+
+        url = url.startsWith(SLASH) ? url : SLASH + url;
+    }
+
 }

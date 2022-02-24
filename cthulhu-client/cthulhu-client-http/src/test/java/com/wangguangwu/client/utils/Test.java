@@ -36,4 +36,10 @@ public class Test {
         }
     }
 
+    @org.junit.jupiter.api.Test
+    public void test_string() {
+        String a = "https://www.zhipin.com";
+        System.out.println(a.startsWith("http:"));
+        System.out.println(a.startsWith("https:"));
+    }
 }

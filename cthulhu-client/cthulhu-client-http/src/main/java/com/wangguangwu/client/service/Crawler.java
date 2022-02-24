@@ -14,17 +14,18 @@ public interface Crawler {
     /**
      * visit the website corresponding to the url
      * parse response from the website.
-     *  @param url  url
-     * @param port port
+     *
+     * @param visitUrl visit url
      * @return map
      */
-    Map<String, String> crawler(String url, int port);
+    Map<String, String> crawler(String visitUrl);
+
 
     /**
-     * get the robot's protocol of the specified website.
+     * get the href from the response.
      *
-     * @param host website domain
+     * @param url url
      */
-    void parseRobotsProtocol(String host);
+    void work(String url);
 
 }

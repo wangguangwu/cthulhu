@@ -13,6 +13,11 @@ public class Symbol {
     public static final String SLASH = "/";
 
     /**
+     * //
+     */
+    public static final String DOUBLE_SLASH = "//";
+
+    /**
      * \r
      */
     public static final char RETURN = '\r';
@@ -26,6 +31,11 @@ public class Symbol {
      * " "
      */
     public static final String SPACE = " ";
+
+    /**
+     * ""
+     */
+    public static final String BLANK = "";
 
     /**
      * :

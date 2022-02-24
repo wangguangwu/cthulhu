@@ -1,5 +1,6 @@
 package com.wangguangwu.client.utils;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -7,8 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
-import static com.wangguangwu.client.entity.Symbol.POINT;
-import static com.wangguangwu.client.entity.Symbol.SLASH;
+import static com.wangguangwu.client.entity.Symbol.*;
 
 /**
  * some methods to operate file.
@@ -16,18 +16,13 @@ import static com.wangguangwu.client.entity.Symbol.SLASH;
  * @author wangguangwu
  */
 @Slf4j
+@Data
 public class FileUtil {
 
     /**
      * default fileType.
      */
-    private static final String DEFAULT_FILETYPE = "txt";
-
-    /**
-     * commonly used fileType.
-     */
-    private static final List<String> FILETYPE_LIST =
-            List.of("txt", "doc", "docx", "png", "jpg");
+    private static String defaultFiletype = ".txt";
 
     /**
      * save data to file.
@@ -57,16 +52,21 @@ public class FileUtil {
      * @param fileName name of the file, such as "helloWorld" and "HelloWorld.txt"
      */
     public static String createFile(String fileName) {
+        // zhipin/robots.txt
+        String tempFolder = fileName.contains(SLASH)
+                ? fileName.substring(0, fileName.lastIndexOf(SLASH)) : BLANK;
+        fileName = fileName.substring(fileName.indexOf(tempFolder) + tempFolder.length() + 1);
+        fileName = fileName.indexOf(POINT) > 0 ? fileName : "root" + fileName;
         // file type
         String fileType = fileName.indexOf(POINT) != -1
-                ? getFileType(fileName) : DEFAULT_FILETYPE;
+                ? BLANK : defaultFiletype;
         // folderPath
         String folderPath = Objects.requireNonNull(FileUtil.class.getResource(SLASH))
-                .getPath() + "export";
+                .getPath() + "export" + SLASH + tempFolder;
         // folder
         createFolder(folderPath);
         // filePath
-        String filePath = folderPath + File.separator + fileName + POINT + fileType;
+        String filePath = folderPath + File.separator + fileName + fileType;
         File file = new File(filePath);
         if (file.exists() && file.exists()) {
             return filePath;
@@ -79,17 +79,6 @@ public class FileUtil {
             log.error("FileUtil createFile error: ", e);
         }
         return filePath;
-    }
-
-    /**
-     * get fileType.
-     *
-     * @param fileName name of the file
-     * @return fileType
-     */
-    private static String getFileType(String fileName) {
-        String fileType = fileName.substring(fileName.lastIndexOf(POINT) + 1);
-        return FILETYPE_LIST.contains(fileType) ? fileType : DEFAULT_FILETYPE;
     }
 
     /**

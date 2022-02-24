@@ -1,7 +1,9 @@
 package com.wangguangwu.client.startup;
 
 import com.wangguangwu.client.service.Crawler;
+import com.wangguangwu.client.service.Work;
 import com.wangguangwu.client.service.impl.CrawlerImpl;
+import com.wangguangwu.client.service.impl.WorkImpl;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class Bootstrap {
 
-    private int port = 443;
-
-    private String url = "www.zhipin.com/robots.txt";
+//    private String url = "https://www.zhipin.com/hangzhou/";
+    private String url = "http://search.dangdang.com/?key=%BB%FA%D0%B5%B1%ED&act=input";
 
     public static void main(String[] args) {
         log.info("client is running...");
@@ -29,9 +30,10 @@ public class Bootstrap {
     }
 
     private void start() {
-        Crawler crawler = new CrawlerImpl();
-        // get the robot's protocol of the specified website
-        crawler.parseRobotsProtocol("www.zhipin.com");
-//        crawler.crawler(url, port);
+/*        Crawler crawler = new CrawlerImpl();
+        crawler.work(url);*/
+
+        Work work = new WorkImpl();
+        work.work(url);
     }
 }
