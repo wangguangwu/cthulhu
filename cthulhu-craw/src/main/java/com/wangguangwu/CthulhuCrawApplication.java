@@ -29,6 +29,7 @@ public class CthulhuCrawApplication {
 
     public static void killSelf() {
         if (!SystemUtil.getOsInfo().isLinux()) {
+            log.info("The current OS is not Linux, skip kill self.");
             return;
         }
 
@@ -37,11 +38,10 @@ public class CthulhuCrawApplication {
         List<String> pidList = new ArrayList<>();
 
         final String findProcessLinuxCommand = "ps -ef";
-
         for (String line : RuntimeUtil.execForLines(findProcessLinuxCommand)) {
             if (line.contains("java") && line.contains("cthulhu") && line.contains(".jar")) {
-                String[] strs = line.split("\\s+");
-                String pid = strs[1];
+                String[] split = line.split("\\s+");
+                String pid = split[1];
 
                 if (!pid.equals(myPid)) {
                     log.info("Find old cthulhu: [{}]", line);
