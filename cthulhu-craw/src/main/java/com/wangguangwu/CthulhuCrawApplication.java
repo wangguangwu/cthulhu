@@ -19,16 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 public class CthulhuCrawApplication {
 
     public static void main(String[] args) {
+        killSelf();
+
         SpringApplication.run(CthulhuCrawApplication.class, args);
     }
 
-
     public static void killSelf() {
-
-        log.info("Start kill self.");
-
         if (!SystemUtil.getOsInfo().isLinux()) {
-            log.info("The current OS is not Linux, skip kill self.");
             return;
         }
 
@@ -43,17 +40,13 @@ public class CthulhuCrawApplication {
                 String pid = split[1];
 
                 if (!pid.equals(myPid)) {
-                    log.info("Find old cthulhu: [{}]", line);
                     pidList.add(pid);
                 }
             }
         }
 
         for (String pid : pidList) {
-            log.info("Kill process, pid is [{}].", pid);
             RuntimeUtil.exec("kill -9 " + pid);
         }
-
-        log.info("Kill self complete, my pid is [{}].", myPid);
     }
 }
