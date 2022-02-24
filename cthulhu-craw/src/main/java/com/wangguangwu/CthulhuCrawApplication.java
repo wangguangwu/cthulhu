@@ -28,6 +28,9 @@ public class CthulhuCrawApplication {
 
 
     public static void killSelf() {
+
+        log.info("Start kill self.");
+
         if (!SystemUtil.getOsInfo().isLinux()) {
             log.info("The current OS is not Linux, skip kill self.");
             return;
