@@ -1,8 +1,6 @@
 package com.wangguangwu.client.startup;
 
-import com.wangguangwu.client.service.Crawler;
 import com.wangguangwu.client.service.Work;
-import com.wangguangwu.client.service.impl.CrawlerImpl;
 import com.wangguangwu.client.service.impl.WorkImpl;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class Bootstrap {
 
-//    private String url = "https://www.zhipin.com/hangzhou/";
-    private String url = "http://search.dangdang.com/?key=%BB%FA%D0%B5%B1%ED&act=input";
+    private String url = "https://www.zhipin.com/hangzhou/";
+//    private String url = "http://search.dangdang.com/?key=%BB%FA%D0%B5%B1%ED&act=input";
 
     public static void main(String[] args) {
         log.info("client is running...");
