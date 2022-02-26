@@ -58,7 +58,7 @@ public class Request implements ServletRequest {
 
         // requestLine, such as GET / HTTP/1.1
         String requestLine = request.toString().split("\r\n")[0];
-        String[] strings = requestLine.split(SPACE);
+        String[] strings = requestLine.split(" ");
         this.method = strings[0];
         this.url = strings[1];
         log.info("requestLine: {}", requestLine);
