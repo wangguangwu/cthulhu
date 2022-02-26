@@ -2,11 +2,13 @@ package com.wangguangwu.server.thread;
 
 import com.wangguangwu.server.http.Request;
 import com.wangguangwu.server.http.Response;
+import jakarta.servlet.http.HttpServlet;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServlet;
+
 import java.net.Socket;
 import java.util.Map;
+
 
 /**
  * Parse http request.

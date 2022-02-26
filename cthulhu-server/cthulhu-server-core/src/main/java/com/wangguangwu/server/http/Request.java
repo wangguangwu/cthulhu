@@ -1,10 +1,9 @@
 package com.wangguangwu.server.http;
 
+import jakarta.servlet.*;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
@@ -58,7 +57,7 @@ public class Request implements ServletRequest {
 
         // requestLine, such as GET / HTTP/1.1
         String requestLine = request.toString().split("\r\n")[0];
-        String[] strings = requestLine.split(SPACE);
+        String[] strings = requestLine.split(" ");
         this.method = strings[0];
         this.url = strings[1];
         log.info("requestLine: {}", requestLine);
@@ -84,13 +83,14 @@ public class Request implements ServletRequest {
         this.inputStream = inputStream;
     }
 
+
     @Override
-    public Object getAttribute(String name) {
+    public Object getAttribute(String s) {
         return null;
     }
 
     @Override
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return null;
     }
 
@@ -100,12 +100,17 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
+    public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
 
     }
 
     @Override
     public int getContentLength() {
+        return 0;
+    }
+
+    @Override
+    public long getContentLengthLong() {
         return 0;
     }
 
@@ -120,22 +125,22 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public String getParameter(String name) {
+    public String getParameter(String s) {
         return null;
     }
 
     @Override
-    public Enumeration getParameterNames() {
+    public Enumeration<String> getParameterNames() {
         return null;
     }
 
     @Override
-    public String[] getParameterValues(String name) {
+    public String[] getParameterValues(String s) {
         return new String[0];
     }
 
     @Override
-    public Map getParameterMap() {
+    public Map<String, String[]> getParameterMap() {
         return null;
     }
 
@@ -175,12 +180,12 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public void setAttribute(String name, Object o) {
+    public void setAttribute(String s, Object o) {
 
     }
 
     @Override
-    public void removeAttribute(String name) {
+    public void removeAttribute(String s) {
 
     }
 
@@ -190,7 +195,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public Enumeration getLocales() {
+    public Enumeration<Locale> getLocales() {
         return null;
     }
 
@@ -200,12 +205,12 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public RequestDispatcher getRequestDispatcher(String path) {
+    public RequestDispatcher getRequestDispatcher(String s) {
         return null;
     }
 
     @Override
-    public String getRealPath(String path) {
+    public String getRealPath(String s) {
         return null;
     }
 
@@ -227,5 +232,40 @@ public class Request implements ServletRequest {
     @Override
     public int getLocalPort() {
         return 0;
+    }
+
+    @Override
+    public ServletContext getServletContext() {
+        return null;
+    }
+
+    @Override
+    public AsyncContext startAsync() throws IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public boolean isAsyncStarted() {
+        return false;
+    }
+
+    @Override
+    public boolean isAsyncSupported() {
+        return false;
+    }
+
+    @Override
+    public AsyncContext getAsyncContext() {
+        return null;
+    }
+
+    @Override
+    public DispatcherType getDispatcherType() {
+        return null;
     }
 }

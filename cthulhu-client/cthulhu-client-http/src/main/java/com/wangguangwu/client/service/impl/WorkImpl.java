@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import static com.wangguangwu.client.entity.Commons.*;

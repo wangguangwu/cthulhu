@@ -28,9 +28,6 @@ public class Bootstrap {
     }
 
     private void start() {
-/*        Crawler crawler = new CrawlerImpl();
-        crawler.work(url);*/
-
         Work work = new WorkImpl();
         work.work(url);
     }

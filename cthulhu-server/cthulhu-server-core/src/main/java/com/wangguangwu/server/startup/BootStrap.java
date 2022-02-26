@@ -1,6 +1,7 @@
 package com.wangguangwu.server.startup;
 
 import com.wangguangwu.server.thread.RequestProcessor;
+import jakarta.servlet.http.HttpServlet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
-import javax.servlet.http.HttpServlet;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
