@@ -17,6 +17,7 @@ import com.wangguangwu.server.CthulhuServletWebServerFactoryCustomizer;
 public class WebServerConfiguration {
 
     @Bean
+    @SuppressWarnings("unused")
     CthulhuServletWebServerFactory cthulhuServletWebServerFactory(
         ObjectProvider<UndertowDeploymentInfoCustomizer> deploymentInfoCustomizers,
         ObjectProvider<UndertowBuilderCustomizer> builderCustomizers) {
@@ -24,6 +25,7 @@ public class WebServerConfiguration {
     }
 
     @Bean
+    @SuppressWarnings("unused")
     CthulhuServletWebServerFactoryCustomizer cthulhuServletWebServerFactoryCustomizer(
         ServerProperties serverProperties) {
         return new CthulhuServletWebServerFactoryCustomizer();

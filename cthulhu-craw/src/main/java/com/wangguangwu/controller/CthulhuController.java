@@ -26,7 +26,7 @@ public class CthulhuController {
     }
 
     @RequestMapping("restart")
-    public String restart() throws InterruptedException {
+    public String restart(){
         // The absolute path of the script on the server.
         Process exec = RuntimeUtil.exec("bash /root/workspace/deploy.sh");
         log.info("outputStream: {}", IoUtil.read(exec.getInputStream()));
