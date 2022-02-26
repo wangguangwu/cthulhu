@@ -18,7 +18,7 @@ public class CthulhuWebServer implements WebServer {
         try {
             bootStrap.start();
         } catch (Exception e) {
-            new WebServerException("Failed to start web server", e);
+            throw new WebServerException("Failed to start web server", e);
         }
     }
 
