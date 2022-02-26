@@ -1,10 +1,10 @@
-package com.wangguanguw;
+package com.wangguangwu.springbootexample;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CthulhuSpringBootStartterApplicationTests {
+class SpringbootExampleApplicationTests {
 
     @Test
     void contextLoads() {

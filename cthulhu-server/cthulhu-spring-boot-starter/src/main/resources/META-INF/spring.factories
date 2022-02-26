@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ com.wangguangwu.springboot.starter.config.CthulhuWebServerConfiguration

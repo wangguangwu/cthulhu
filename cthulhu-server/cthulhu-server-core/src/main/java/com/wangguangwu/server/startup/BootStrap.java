@@ -11,6 +11,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -117,6 +118,10 @@ public class BootStrap {
     private void loadServlet() {
         // read the file which named "web.xml" in the resources directory
         log.info("load web.xml: {}", Objects.requireNonNull(this.getClass().getClassLoader().getResource("web.xml")).getPath());
+
+        //
+
+
         InputStream resourceAsStream =
                 this.getClass().getClassLoader().getResourceAsStream("web.xml");
         SAXReader saxReader = new SAXReader();
@@ -124,7 +129,7 @@ public class BootStrap {
             Document document = saxReader.read(resourceAsStream);
             Element rootElement = document.getRootElement();
 
-            List<Node> selectNodes = rootElement.selectNodes("//servlet");
+            List<Node> selectNodes = rootElement.selectNodes("/web-app/servlet");
             selectNodes.forEach(
                     node -> {
                         // <servlet-name>wangguangwu</servlet-name>
