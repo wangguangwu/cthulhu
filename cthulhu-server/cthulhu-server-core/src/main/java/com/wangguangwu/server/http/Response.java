@@ -2,11 +2,11 @@ package com.wangguangwu.server.http;
 
 import com.wangguangwu.server.util.HttpProtocolUtil;
 import com.wangguangwu.server.util.StaticResourceUtil;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.ServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 import java.io.*;
 import java.util.Locale;
 
@@ -54,6 +54,7 @@ public class Response implements ServletResponse {
         }
     }
 
+
     @Override
     public String getCharacterEncoding() {
         return null;
@@ -75,22 +76,27 @@ public class Response implements ServletResponse {
     }
 
     @Override
-    public void setCharacterEncoding(String charset) {
+    public void setCharacterEncoding(String s) {
 
     }
 
     @Override
-    public void setContentLength(int len) {
+    public void setContentLength(int i) {
 
     }
 
     @Override
-    public void setContentType(String type) {
+    public void setContentLengthLong(long l) {
 
     }
 
     @Override
-    public void setBufferSize(int size) {
+    public void setContentType(String s) {
+
+    }
+
+    @Override
+    public void setBufferSize(int i) {
 
     }
 
@@ -120,7 +126,7 @@ public class Response implements ServletResponse {
     }
 
     @Override
-    public void setLocale(Locale loc) {
+    public void setLocale(Locale locale) {
 
     }
 
