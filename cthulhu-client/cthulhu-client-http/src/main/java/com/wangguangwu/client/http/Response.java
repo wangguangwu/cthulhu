@@ -252,16 +252,4 @@ public class Response {
         fileName = fileName.substring(index1 + 1, index2) + tempFile;
     }
 
-    public static void main(String[] args) {
-        String a = "Cache-Control: no-cache\n" +
-                "process-stage: Stage-Outbound\n" +
-                "Connection: keep-alive\n" +
-                "Set-Cookie: lastCity=101210100; path=/; domain=.zhipin.com; Max-Age=31536000; Expires=Fri, 17-Feb-2023 06:26:10 GMT\n" +
-                "Vary: Accept-Encoding\n" +
-                "Content-Length: 392116\n" +
-                "Date: Thu, 17 Feb 2022 06:26:10 GMT\n" +
-                "Content-Language: zh-CN\n" +
-                "Content-Type: text/html;charset=utf-8";
-        System.out.println(a.getBytes(StandardCharsets.UTF_8).length);
-    }
 }

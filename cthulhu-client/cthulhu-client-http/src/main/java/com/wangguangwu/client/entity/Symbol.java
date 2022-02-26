@@ -45,6 +45,7 @@ public class Symbol {
     /**
      * =
      */
+    @SuppressWarnings("unused")
     public static final String EQUALS = "=";
 
     /**
@@ -56,4 +57,5 @@ public class Symbol {
      * .
      */
     public static final char POINT = '.';
+
 }

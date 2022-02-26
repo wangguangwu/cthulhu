@@ -9,6 +9,9 @@ package com.wangguangwu.client.logging.ansi;
  */
 public enum AnsiStyle implements AnsiElement {
 
+    /**
+     * ansiStyle.
+     */
     NORMAL("0"),
 
     BOLD("1"),

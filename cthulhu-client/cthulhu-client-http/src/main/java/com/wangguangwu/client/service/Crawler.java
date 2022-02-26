@@ -26,6 +26,7 @@ public interface Crawler {
      *
      * @param url url
      */
+    @SuppressWarnings("unused")
     void work(String url);
 
 }

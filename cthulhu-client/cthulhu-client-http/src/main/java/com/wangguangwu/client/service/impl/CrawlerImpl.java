@@ -11,7 +11,6 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.wangguangwu.client.entity.Commons.*;
@@ -137,6 +136,10 @@ public class CrawlerImpl implements Crawler {
         // ex: User-agent: baidu\r\n Disallow: /\r\n\r\n
         List<String> list = Arrays.asList(responseMap.get("responseBody").split("\r\n\r\n"));
 
+        parse(list, robotList);
+    }
+
+    static void parse(List<String> list, List<Robot> robotList) {
         list.forEach(data -> {
             Robot robot = new Robot();
             List<String> strings = Arrays.asList(data.split("\r\n"));

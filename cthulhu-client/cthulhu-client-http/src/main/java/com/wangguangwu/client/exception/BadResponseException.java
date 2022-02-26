@@ -8,6 +8,7 @@ package com.wangguangwu.client.exception;
  */
 public class BadResponseException extends RuntimeException {
 
+    @SuppressWarnings("unused")
     public BadResponseException() {
     }
 
@@ -15,14 +16,17 @@ public class BadResponseException extends RuntimeException {
         super(message);
     }
 
+    @SuppressWarnings("unused")
     public BadResponseException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    @SuppressWarnings("unused")
     public BadResponseException(Throwable cause) {
         super(cause);
     }
 
+    @SuppressWarnings("unused")
     public BadResponseException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }

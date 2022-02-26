@@ -32,6 +32,7 @@ public abstract class AnsiOutput {
      *
      * @param enabled if ANSI is enabled, disabled or detected
      */
+    @SuppressWarnings("unused")
     public static void setEnabled(Enabled enabled) {
         AnsiOutput.enabled = enabled;
     }
@@ -41,6 +42,7 @@ public abstract class AnsiOutput {
      *
      * @return if ANSI enabled, disabled or detected
      */
+    @SuppressWarnings("unused")
     public static Enabled getEnabled() {
         return AnsiOutput.enabled;
     }
@@ -50,6 +52,7 @@ public abstract class AnsiOutput {
      *
      * @param consoleAvailable if the console is known to be available or {@code null} to use standard detection logic.
      */
+    @SuppressWarnings("unused")
     public static void setConsoleAvailable(Boolean consoleAvailable) {
         AnsiOutput.consoleAvailable = consoleAvailable;
     }
@@ -60,6 +63,7 @@ public abstract class AnsiOutput {
      * @param element the element to encode
      * @return the encoded element or an empty string
      */
+    @SuppressWarnings("unused")
     public static String encode(AnsiElement element) {
         if (isEnabled()) {
             return ENCODE_START + element + ENCODE_END;

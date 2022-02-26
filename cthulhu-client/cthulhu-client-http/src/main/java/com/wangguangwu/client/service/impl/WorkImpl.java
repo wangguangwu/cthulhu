@@ -209,35 +209,7 @@ public class WorkImpl implements Work {
         // ex: User-agent: baidu\r\n Disallow: /\r\n\r\n
         List<String> list = Arrays.asList(responseBody.toString().split("\r\n\r\n"));
 
-        list.forEach(data -> {
-            Robot robot = new Robot();
-            List<String> strings = Arrays.asList(data.split("\r\n"));
-            // ex: Disallow: *?from=*
-            List<String> disAllows = new ArrayList<>();
-            // ex: Allow: *?from=*
-            List<String> allows = new ArrayList<>();
-
-            strings.forEach(
-                    str -> {
-                        if (str.contains(SEMICOLON)) {
-                            int index = str.indexOf(SEMICOLON);
-                            String value = str.substring(index + 2);
-                            if (str.startsWith(USER_AGENT)) {
-                                robot.setUserAgentName(value);
-                            }
-                            if (str.startsWith(DIS_ALLOW)) {
-                                disAllows.add(value);
-                            }
-                            if (str.startsWith(ALLOW)) {
-                                allows.add(value);
-                            }
-                        }
-                    }
-            );
-            robot.setAllows(allows);
-            robot.setDisAllows(disAllows);
-            robotList.add(robot);
-        });
+        CrawlerImpl.parse(list, robotList);
     }
 
 }
