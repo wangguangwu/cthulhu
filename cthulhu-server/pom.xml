@@ -73,8 +73,6 @@
         <spring-boot.version>3.0.0-M1</spring-boot.version>
     </properties>
 
-    <repositories/>
-
     <profiles>
         <profile>
             <id>cthulhu-server</id>
@@ -171,20 +169,6 @@
             </distributionManagement>
         </profile>
     </profiles>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>public</id>
-            <name>aliyun nexus</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
