@@ -66,11 +66,13 @@ public class Response implements ServletResponse {
     }
 
     @Override
+    @SuppressWarnings("all")
     public ServletOutputStream getOutputStream() throws IOException {
         return null;
     }
 
     @Override
+    @SuppressWarnings("all")
     public PrintWriter getWriter() throws IOException {
         return null;
     }
@@ -106,6 +108,7 @@ public class Response implements ServletResponse {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void flushBuffer() throws IOException {
 
     }

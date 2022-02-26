@@ -33,6 +33,7 @@ public class Request implements ServletRequest {
      * <p>
      * get information from socketInputStream.
      */
+    @SuppressWarnings("unused")
     private InputStream inputStream;
 
     /**
@@ -63,10 +64,12 @@ public class Request implements ServletRequest {
         log.info("requestLine: {}", requestLine);
     }
 
+    @SuppressWarnings("unused")
     public String getMethod() {
         return method;
     }
 
+    @SuppressWarnings("unused")
     public void setMethod(String method) {
         this.method = method;
     }
@@ -75,10 +78,12 @@ public class Request implements ServletRequest {
         return url;
     }
 
+    @SuppressWarnings("unused")
     public void setUrl(String url) {
         this.url = url;
     }
 
+    @SuppressWarnings("unused")
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
@@ -100,6 +105,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
 
     }
@@ -120,6 +126,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
+    @SuppressWarnings("all")
     public ServletInputStream getInputStream() throws IOException {
         return null;
     }
@@ -165,6 +172,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
+    @SuppressWarnings("all")
     public BufferedReader getReader() throws IOException {
         return null;
     }
@@ -210,6 +218,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
+    @SuppressWarnings("all")
     public String getRealPath(String s) {
         return null;
     }

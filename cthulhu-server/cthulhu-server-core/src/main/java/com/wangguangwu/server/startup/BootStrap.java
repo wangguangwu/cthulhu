@@ -113,6 +113,7 @@ public class BootStrap {
     /**
      * use dom4j to load and parse web.xml.
      */
+    @SuppressWarnings("deprecation")
     private void loadServlet() {
         // read the file which named "web.xml" in the resources directory
         log.info("load web.xml: {}", Objects.requireNonNull(this.getClass().getClassLoader().getResource("web.xml")).getPath());

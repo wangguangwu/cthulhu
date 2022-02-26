@@ -2,7 +2,7 @@ package com.wangguangwu.server.logging.ansi;
 
 
 /**
- * An ANSI encodable element.
+ * An ANSI encodeAble element.
  *
  * @author Phillip Webb
  * @since 1.0.0
