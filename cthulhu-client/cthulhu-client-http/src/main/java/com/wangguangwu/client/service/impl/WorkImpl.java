@@ -21,7 +21,6 @@ import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
 
 /**
  * @author wangguangwu
- * @date 2022/2/24
  */
 @Slf4j
 @Data

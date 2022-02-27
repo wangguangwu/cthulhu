@@ -4,7 +4,6 @@ package com.wangguangwu.client.entity;
  * Http common.
  *
  * @author wangguangwu
- * @date 2022/2/23
  */
 public class Http {
 

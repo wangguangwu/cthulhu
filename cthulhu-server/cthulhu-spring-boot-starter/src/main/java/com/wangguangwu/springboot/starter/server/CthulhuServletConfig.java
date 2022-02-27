@@ -7,7 +7,6 @@ import java.util.Enumeration;
 
 /**
  * @author wangguangwu
- * @date 2022/2/27
  */
 public class CthulhuServletConfig implements Servlet, ServletConfig, java.io.Serializable {
 

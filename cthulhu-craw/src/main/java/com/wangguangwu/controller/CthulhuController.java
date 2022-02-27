@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
  * Project entry.
  *
  * @author wangguangwu
- * @date 2022/2/23
  */
 @Slf4j
 @RestController

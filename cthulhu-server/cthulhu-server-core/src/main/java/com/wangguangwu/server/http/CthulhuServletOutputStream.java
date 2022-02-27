@@ -6,11 +6,9 @@ import jakarta.servlet.WriteListener;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author wangguangwu
- * @date 2022/2/27
  */
 public class CthulhuServletOutputStream extends ServletOutputStream {
 
@@ -53,6 +51,7 @@ public class CthulhuServletOutputStream extends ServletOutputStream {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void write(int b) throws IOException {
 
     }

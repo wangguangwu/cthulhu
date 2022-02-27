@@ -10,7 +10,6 @@ import java.io.IOException;
 
 /**
  * @author wangguangwu
- * @date 2022/2/26
  */
 public class CthulhuRequestDispatcher implements RequestDispatcher {
 

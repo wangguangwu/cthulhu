@@ -157,6 +157,7 @@ public class Request implements HttpServletRequest {
     }
 
     @Override
+    @SuppressWarnings({"nls"})
     public StringBuffer getRequestURL() {
         return null;
     }

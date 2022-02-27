@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author wangguangwu
- * @date 2022/2/27
  */
 @RestController
 @RequestMapping("/cthulhu")

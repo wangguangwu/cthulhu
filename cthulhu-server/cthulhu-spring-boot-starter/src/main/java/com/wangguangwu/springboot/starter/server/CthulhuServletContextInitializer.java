@@ -6,7 +6,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 
 /**
  * @author wangguangwu
- * @date 2022/2/26
  */
 public class CthulhuServletContextInitializer implements ServletContextInitializer {
     @Override
