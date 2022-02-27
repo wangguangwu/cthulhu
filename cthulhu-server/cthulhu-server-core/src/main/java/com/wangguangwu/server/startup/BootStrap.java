@@ -1,5 +1,6 @@
 package com.wangguangwu.server.startup;
 
+import com.wangguangwu.server.http.Request;
 import com.wangguangwu.server.thread.RequestProcessor;
 import jakarta.servlet.http.HttpServlet;
 import lombok.Getter;
@@ -55,11 +56,16 @@ public class BootStrap {
     public static void main(String[] args) {
         BootStrap bootStrap = new BootStrap();
         try {
+//            registerServlet();
             // start the project
             bootStrap.start();
         } catch (Exception e) {
             log.error("BootStrap main error:", e);
         }
+    }
+
+    public void registerServlet(String urlPattern, HttpServlet servlet) {
+        servletMap.put(urlPattern, servlet);
     }
 
     /**
@@ -68,7 +74,7 @@ public class BootStrap {
     @SuppressWarnings("InfiniteLoopStatement")
     public void start() throws Exception {
         // load and parse related configuration, such as web.xml
-        loadServlet();
+//        loadServlet();
 
         // create a threadPoolExecutor
         ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();

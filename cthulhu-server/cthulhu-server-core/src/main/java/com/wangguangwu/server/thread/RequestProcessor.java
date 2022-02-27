@@ -5,7 +5,6 @@ import com.wangguangwu.server.http.Response;
 import jakarta.servlet.http.HttpServlet;
 import lombok.extern.slf4j.Slf4j;
 
-
 import java.net.Socket;
 import java.util.Map;
 
@@ -47,12 +46,12 @@ public class RequestProcessor extends Thread {
             Request request = new Request(socket.getInputStream());
             Response response = new Response(socket.getOutputStream());
 
-            if (servletMap.get(request.getUrl()) == null) {
+            if (servletMap.get(request.getUrl()) != null) {
                 // static resource handling
                 response.outputHtml(request.getUrl());
             } else {
                 // dynamic resource handling
-                HttpServlet httpServlet = servletMap.get(request.getUrl());
+                HttpServlet httpServlet = servletMap.get("/");
                 httpServlet.service(request, response);
             }
         } catch (Exception e) {

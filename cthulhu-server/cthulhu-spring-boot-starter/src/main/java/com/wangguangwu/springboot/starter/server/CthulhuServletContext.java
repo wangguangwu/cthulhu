@@ -1,7 +1,9 @@
 package com.wangguangwu.springboot.starter.server;
 
+import com.wangguangwu.server.startup.BootStrap;
 import jakarta.servlet.*;
 import jakarta.servlet.descriptor.JspConfigDescriptor;
+import jakarta.servlet.http.HttpServlet;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.lang.Nullable;
@@ -28,15 +30,19 @@ public class CthulhuServletContext implements ServletContext {
 
     private String defaultServletName = COMMON_DEFAULT_SERVLET_NAME;
 
-    private final ResourceLoader resourceLoader;
+    private ResourceLoader resourceLoader;
 
-    private final String resourceBasePath;
+    private String resourceBasePath;
 
     private final Map<String, RequestDispatcher> namedRequestDispatchers = new HashMap<>();
 
     private static final String TEMP_DIR_SYSTEM_PROPERTY = "java.io.tmpdir";
 
     public static final String TEMP_DIR_CONTEXT_ATTRIBUTE = "jakarta.servlet.context.tempdir";
+
+    public  BootStrap bootStrap;
+
+
 
     @Override
     public String getContextPath() {
@@ -95,6 +101,7 @@ public class CthulhuServletContext implements ServletContext {
 
     @Override
     public RequestDispatcher getRequestDispatcher(String path) {
+        //
         return null;
     }
 
@@ -186,9 +193,13 @@ public class CthulhuServletContext implements ServletContext {
         }
     }
 
-    public CthulhuServletContext(String resourceBasePath, @Nullable ResourceLoader resourceLoader) {
+    public CthulhuServletContext() {
+    }
+
+    public CthulhuServletContext(String resourceBasePath, @Nullable ResourceLoader resourceLoader, BootStrap bootStrap) {
         this.resourceLoader = (resourceLoader != null ? resourceLoader : new DefaultResourceLoader());
         this.resourceBasePath = resourceBasePath;
+        this.bootStrap = bootStrap;
 
         // Use JVM temp dir as ServletContext temp dir.
         String tempDir = System.getProperty(TEMP_DIR_SYSTEM_PROPERTY);
@@ -223,6 +234,17 @@ public class CthulhuServletContext implements ServletContext {
 
     @Override
     public ServletRegistration.Dynamic addServlet(String servletName, Servlet servlet) {
+        //
+        if ("dispatcherServlet".equals(servletName)) {
+            servletName = "/";
+        }
+        bootStrap.registerServlet(servletName, (HttpServlet) servlet);
+        try {
+            servlet.init(new CthulhuServletConfig(this));
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
         return null;
     }
 

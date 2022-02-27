@@ -10,6 +10,6 @@ public class CthulhuServletWebServerFactoryCustomizer implements
 
     @Override
     public void customize(CthulhuServletWebServerFactory factory) {
-
+        System.out.println();
     }
 }

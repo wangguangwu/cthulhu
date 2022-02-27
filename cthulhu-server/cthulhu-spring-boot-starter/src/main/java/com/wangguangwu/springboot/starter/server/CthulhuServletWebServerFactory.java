@@ -1,5 +1,6 @@
 package com.wangguangwu.springboot.starter.server;
 
+import com.wangguangwu.server.startup.BootStrap;
 import jakarta.servlet.ServletException;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -12,7 +13,10 @@ public class CthulhuServletWebServerFactory extends AbstractServletWebServerFact
 
     @Override
     public WebServer getWebServer(ServletContextInitializer... initializers) {
-        CthulhuServletContext servletContext = new CthulhuServletContext("",null);
+        BootStrap bootStrap = new BootStrap();
+
+        CthulhuServletContext servletContext = new CthulhuServletContext("",null, bootStrap);
+
 
         if (initializers != null) {
             for (ServletContextInitializer initializer : initializers) {
@@ -23,6 +27,6 @@ public class CthulhuServletWebServerFactory extends AbstractServletWebServerFact
                 }
             }
         }
-        return new CthulhuWebServer();
+        return new CthulhuWebServer(bootStrap);
     }
 }

@@ -10,7 +10,11 @@ import org.springframework.boot.web.server.WebServerException;
  */
 public class CthulhuWebServer implements WebServer {
 
-    private final BootStrap bootStrap = new BootStrap();
+    private final BootStrap bootStrap;
+
+    public CthulhuWebServer(BootStrap bootStrap) {
+        this.bootStrap = bootStrap;
+    }
 
     @Override
     public void start() throws WebServerException {

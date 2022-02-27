@@ -1,14 +1,18 @@
 package com.wangguangwu.server.http;
 
 import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import lombok.extern.slf4j.Slf4j;
 
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * parse http request.
@@ -16,7 +20,7 @@ import java.util.Map;
  * @author wangguangwu
  */
 @Slf4j
-public class Request implements ServletRequest {
+public class Request implements HttpServletRequest {
 
     /**
      * request method, such as GET or POST.
@@ -35,6 +39,8 @@ public class Request implements ServletRequest {
      */
     @SuppressWarnings("unused")
     private InputStream inputStream;
+
+    private final Map<String, Object> attributes = new ConcurrentHashMap<>();
 
     /**
      * inputStream constructor.
@@ -64,9 +70,165 @@ public class Request implements ServletRequest {
         log.info("requestLine: {}", requestLine);
     }
 
+    @Override
+    public String getAuthType() {
+        return null;
+    }
+
+    @Override
+    public Cookie[] getCookies() {
+        return new Cookie[0];
+    }
+
+    @Override
+    public long getDateHeader(String name) {
+        return 0;
+    }
+
+    @Override
+    public String getHeader(String name) {
+        return null;
+    }
+
+    @Override
+    public Enumeration<String> getHeaders(String name) {
+        return null;
+    }
+
+    @Override
+    public Enumeration<String> getHeaderNames() {
+        return null;
+    }
+
+    @Override
+    public int getIntHeader(String name) {
+        return 0;
+    }
+
+    @Override
     @SuppressWarnings("unused")
     public String getMethod() {
         return method;
+    }
+
+    @Override
+    public String getPathInfo() {
+        return null;
+    }
+
+    @Override
+    public String getPathTranslated() {
+        return null;
+    }
+
+    @Override
+    public String getContextPath() {
+        return null;
+    }
+
+    @Override
+    public String getQueryString() {
+        return null;
+    }
+
+    @Override
+    public String getRemoteUser() {
+        return null;
+    }
+
+    @Override
+    public boolean isUserInRole(String role) {
+        return false;
+    }
+
+    @Override
+    public Principal getUserPrincipal() {
+        return null;
+    }
+
+    @Override
+    public String getRequestedSessionId() {
+        return null;
+    }
+
+    @Override
+    public String getRequestURI() {
+        return url;
+    }
+
+    @Override
+    public StringBuffer getRequestURL() {
+        return null;
+    }
+
+    @Override
+    public String getServletPath() {
+        return null;
+    }
+
+    @Override
+    public HttpSession getSession(boolean create) {
+        return null;
+    }
+
+    @Override
+    public HttpSession getSession() {
+        return null;
+    }
+
+    @Override
+    public String changeSessionId() {
+        return null;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdValid() {
+        return false;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdFromCookie() {
+        return false;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdFromURL() {
+        return false;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdFromUrl() {
+        return false;
+    }
+
+    @Override
+    public boolean authenticate(HttpServletResponse response) throws IOException, ServletException {
+        return false;
+    }
+
+    @Override
+    public void login(String username, String password) throws ServletException {
+
+    }
+
+    @Override
+    public void logout() throws ServletException {
+
+    }
+
+    @Override
+    public Collection<Part> getParts() throws IOException, ServletException {
+        return null;
+    }
+
+    @Override
+    public Part getPart(String name) throws IOException, ServletException {
+        return null;
+    }
+
+    @Override
+    public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
+        return null;
     }
 
     @SuppressWarnings("unused")
@@ -90,8 +252,8 @@ public class Request implements ServletRequest {
 
 
     @Override
-    public Object getAttribute(String s) {
-        return null;
+    public Object getAttribute(String name) {
+        return attributes.get(name);
     }
 
     @Override
@@ -105,8 +267,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    @SuppressWarnings("all")
-    public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
+    public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
 
     }
 
@@ -126,13 +287,12 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    @SuppressWarnings("all")
     public ServletInputStream getInputStream() throws IOException {
         return null;
     }
 
     @Override
-    public String getParameter(String s) {
+    public String getParameter(String name) {
         return null;
     }
 
@@ -142,7 +302,7 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public String[] getParameterValues(String s) {
+    public String[] getParameterValues(String name) {
         return new String[0];
     }
 
@@ -172,7 +332,6 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    @SuppressWarnings("all")
     public BufferedReader getReader() throws IOException {
         return null;
     }
@@ -188,12 +347,12 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public void setAttribute(String s, Object o) {
-
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
     }
 
     @Override
-    public void removeAttribute(String s) {
+    public void removeAttribute(String name) {
 
     }
 
@@ -213,13 +372,12 @@ public class Request implements ServletRequest {
     }
 
     @Override
-    public RequestDispatcher getRequestDispatcher(String s) {
+    public RequestDispatcher getRequestDispatcher(String path) {
         return null;
     }
 
     @Override
-    @SuppressWarnings("all")
-    public String getRealPath(String s) {
+    public String getRealPath(String path) {
         return null;
     }
 
