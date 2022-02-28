@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 public class CthulhuWebServerConfiguration {
 
     @Bean
-    @SuppressWarnings("unused")
+    
     CthulhuServletWebServerFactory cthulhuServletWebServerFactory(
             ObjectProvider<UndertowDeploymentInfoCustomizer> deploymentInfoCustomizers,
             ObjectProvider<UndertowBuilderCustomizer> builderCustomizers) {
@@ -22,7 +22,7 @@ public class CthulhuWebServerConfiguration {
     }
 
     @Bean
-    @SuppressWarnings("unused")
+    
     CthulhuServletWebServerFactoryCustomizer cthulhuServletWebServerFactoryCustomizer(
             ServerProperties serverProperties) {
         return new CthulhuServletWebServerFactoryCustomizer();

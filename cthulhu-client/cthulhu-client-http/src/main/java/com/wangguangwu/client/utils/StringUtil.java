@@ -34,48 +34,13 @@ public class StringUtil {
      * @param redirectLocation redirectLocation
      * @param port             port
      */
-    public static Map<String, String> parseHostAndUrl(String redirectLocation, int port) {
-        String protocol = port == 80 ? HTTP_PROTOCOL : HTTPS_PROTOCOL;
-        String fullUrl = constructUrl(redirectLocation, protocol);
-        return parseHostAndUrl(fullUrl);
-    }
+//    public static Map<String, String> parseHostAndUrl(String redirectLocation, int port) {
+//        String protocol = port == 80 ? HTTP_PROTOCOL : HTTPS_PROTOCOL;
+//        String fullUrl = constructUrl(redirectLocation, protocol);
+//        return parseHostAndUrl(fullUrl);
+//    }
 
-    /**
-     * parse host、url、protocol and port.
-     *
-     * @param fullUrl host + url, such as https://www.baidu.com/index.html
-     */
-    public static Map<String, String> parseHostAndUrl(String fullUrl) {
-        Map<String, String> map = new HashMap<>(4);
 
-        String protocol;
-        String host;
-        String url;
-        String port;
-
-        if (fullUrl.startsWith(HTTPS_PROTOCOL_START)) {
-            protocol = HTTPS_PROTOCOL;
-            port = "443";
-        } else {
-            protocol = HTTP_PROTOCOL;
-            port = "80";
-        }
-
-        if (fullUrl.contains(DOUBLE_SLASH)) {
-            fullUrl = fullUrl.substring(fullUrl.indexOf(DOUBLE_SLASH) + 2);
-        }
-
-        host = fullUrl.contains(COM) ? fullUrl.substring(0, fullUrl.indexOf(COM) + 4) : fullUrl;
-        url = fullUrl.contains(COM) ? fullUrl.substring(fullUrl.indexOf(COM) + 4) : "";
-
-        url = url.startsWith(SLASH) ? url : SLASH + url;
-
-        map.put("protocol", protocol);
-        map.put("host", host);
-        map.put("url", url);
-        map.put("port", port);
-        return map;
-    }
 
 
     /**

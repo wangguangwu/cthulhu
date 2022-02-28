@@ -10,13 +10,13 @@ public class Http {
     /**
      * http protocol port.
      */
-    @SuppressWarnings("unused")
+    
     public static final int HTTP_PORT = 80;
 
     /**
      * https protocol port.
      */
-    @SuppressWarnings("unused")
+    
     public static final int HTTPS_PORT = 443;
 
     /**
@@ -53,7 +53,7 @@ public class Http {
     /**
      * "Content-Length".
      */
-    @SuppressWarnings("unused")
+    
     public static final String CONTENT_LENGTH = "Content-Length";
 
 }

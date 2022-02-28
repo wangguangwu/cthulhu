@@ -1,24 +1,16 @@
 package com.wangguangwu.server.startup;
 
 import com.wangguangwu.server.thread.RequestProcessor;
+import com.wangguangwu.server.util.YamlParseUtil;
 import jakarta.servlet.http.HttpServlet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
 
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -42,6 +34,11 @@ public class BootStrap {
     private String host = "127.0.0.1";
 
     /**
+     * backlog.
+     */
+    private int backlog = 1;
+
+    /**
      * a map that saves the mapping between url and the corresponding servlet.
      */
     private Map<String, HttpServlet> servletMap = new HashMap<>();
@@ -54,36 +51,30 @@ public class BootStrap {
     public static void main(String[] args) {
         BootStrap bootStrap = new BootStrap();
         try {
-//            registerServlet();
-            // start the project
+            // start a webserver
             bootStrap.start();
         } catch (Exception e) {
-            log.error("BootStrap main error:", e);
+            log.error("Start cthulhu error ", e);
         }
     }
 
-    public void registerServlet(String urlPattern, HttpServlet servlet) {
-        servletMap.put(urlPattern, servlet);
-    }
-
     /**
-     * initialize a server.
+     * start a web server and produce service.
      */
     @SuppressWarnings("InfiniteLoopStatement")
     public void start() throws Exception {
-        // load and parse related configuration, such as web.xml
-//        loadServlet();
 
-        // create a threadPoolExecutor
+        loadProperties();
+
         ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
         // create a serverSocket
         ServerSocket serverSocket =
-                new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
+                new ServerSocket(port, backlog, InetAddress.getByName(host));
         log.info("server start on host: {}, port: {}", host, port);
 
+        // listen and handle request
         while (true) {
-            // create client socket
             Socket socket = serverSocket.accept();
             RequestProcessor requestProcessor = new RequestProcessor(socket, servletMap);
             threadPoolExecutor.execute(requestProcessor);
@@ -91,9 +82,34 @@ public class BootStrap {
     }
 
     /**
+     * read configuration from application.yml file.
+     */
+    private void loadProperties() {
+        port = YamlParseUtil.INSTANCE.getValueByKey("server.port") == null
+                ? port : (int) YamlParseUtil.INSTANCE.getValueByKey("server.port");
+
+        host = YamlParseUtil.INSTANCE.getValueByKey("server.host") == null
+                ? host : (String) YamlParseUtil.INSTANCE.getValueByKey("server.host");
+
+        backlog = YamlParseUtil.INSTANCE.getValueByKey("server.backlog") == null
+                ? backlog : (int) YamlParseUtil.INSTANCE.getValueByKey("server.backlog");
+    }
+
+    /**
+     * save the mapping between urlPattern and servlet.
+     *
+     * @param urlPattern urlPattern
+     * @param servlet    servlet
+     */
+    public void registerServlet(String urlPattern, HttpServlet servlet) {
+        servletMap.put(urlPattern, servlet);
+    }
+
+
+    /**
      * create a threadPoolExecutor.
      *
-     * @return a threadPoolExecutor
+     * @return threadPoolExecutor
      */
     private ThreadPoolExecutor getThreadPoolExecutor() {
         // core parameters
@@ -113,53 +129,6 @@ public class BootStrap {
                 threadFactory,
                 handler
         );
-    }
-
-    /**
-     * use dom4j to load and parse web.xml.
-     */
-    @SuppressWarnings("deprecation")
-    private void loadServlet() {
-        // read the file which named "web.xml" in the resources directory
-        log.info("load web.xml: {}", Objects.requireNonNull(this.getClass().getClassLoader().getResource("web.xml")).getPath());
-
-        //
-
-
-        InputStream resourceAsStream =
-                this.getClass().getClassLoader().getResourceAsStream("web.xml");
-        SAXReader saxReader = new SAXReader();
-        try {
-            Document document = saxReader.read(resourceAsStream);
-            Element rootElement = document.getRootElement();
-
-            List<Node> selectNodes = rootElement.selectNodes("/web-app/servlet");
-            selectNodes.forEach(
-                    node -> {
-                        // <servlet-name>wangguangwu</servlet-name>
-                        Element servletNameElement = (Element) node.selectSingleNode("servlet-name");
-                        String servletName = servletNameElement.getStringValue();
-                        // <servlet-class>server.servlet.impl.WangServlet</servlet-class>
-                        Element servletClassElement = (Element) node.selectSingleNode("servlet-class");
-                        String servletClass = servletClassElement.getStringValue();
-
-                        // find url-pattern based on the value of servlet-name
-                        Element servletMapping =
-                                (Element) rootElement.selectSingleNode("/web-app/servlet-mapping[servlet-name='" + servletName + "']");
-                        // /wang
-                        String urlPattern = servletMapping.selectSingleNode("url-pattern").getStringValue();
-                        try {
-                            // save the mapping relationship between url-pattern and the corresponding instance
-                            log.info("servletClass: {}", servletClass);
-                            servletMap.put(urlPattern, (HttpServlet) Class.forName(servletClass).newInstance());
-                        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                            log.error("BootStrap loadServlet error: ", e);
-                        }
-                    }
-            );
-        } catch (DocumentException e) {
-            log.error("BootStrap loadServlet error: ", e);
-        }
     }
 
 }

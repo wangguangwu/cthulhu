@@ -9,14 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
 import java.util.*;
 
-import static com.wangguangwu.client.entity.Commons.*;
-import static com.wangguangwu.client.entity.Http.CHARSET;
-import static com.wangguangwu.client.entity.Http.CONTENT_TYPE;
+import static com.wangguangwu.client.entity.Http.*;
 import static com.wangguangwu.client.entity.Symbol.*;
-import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
 
 
 /**
@@ -25,6 +24,14 @@ import static com.wangguangwu.client.utils.StringUtil.parseHostAndUrl;
 @Slf4j
 @Data
 public class WorkImpl implements Work {
+
+    private String protocol;
+
+    private String host;
+
+    private String uri;
+
+    private int port;
 
     private static List<String> badResponse = List.of("401", "403", "404");
 
@@ -38,17 +45,18 @@ public class WorkImpl implements Work {
 
     @Override
     public void work(String url) {
-        // parse url
-        Map<String, String> hostAndUrl = parseHostAndUrl(url);
 
-        // visit the website
-        visit(hostAndUrl.get(("host")), hostAndUrl.get("url"), Integer.parseInt(hostAndUrl.get("port")));
+        parseHostAndUrl(url);
+
+        // access the website
+        accessWebsite(host, uri, port);
         // parse
-        parseRobotsProtocol(hostAndUrl.get(("host")), Integer.parseInt(hostAndUrl.get("port")));
+        parseRobotsProtocol(host, port);
+
         System.out.println();
     }
 
-    private void visit(String host, String url, int port) {
+    private void accessWebsite(String host, String url, int port) {
         // pre visit the website
         int responseLength = preVisit(host, url, port);
 
@@ -112,10 +120,10 @@ public class WorkImpl implements Work {
             }
 
             if (movedResponse.contains(responseCode)) {
-                // redirect the new website
-                String redirectLocation = responseHeader.get("Location");
-                Map<String, String> hostAndUrl = parseHostAndUrl(redirectLocation, port);
-                preVisit(hostAndUrl.get(("host")), hostAndUrl.get("url"), Integer.parseInt(hostAndUrl.get("port")));
+//                // redirect the new website
+//                String redirectLocation = responseHeader.get("Location");
+//                Map<String, String> hostAndUrl = parseHostAndUrl(redirectLocation, port);
+//                preVisit(hostAndUrl.get(("host")), hostAndUrl.get("url"), Integer.parseInt(hostAndUrl.get("port")));
             }
 
             if (responseHeader.containsKey(CONTENT_TYPE)
@@ -128,11 +136,11 @@ public class WorkImpl implements Work {
 
             websiteCharset.put(host, charset);
 
-            // after first access
-            int responseBesideBodyLength = responseBesidesBody.toString()
-                    .getBytes(charset).length;
-            int responseBodyLength = Integer.parseInt(responseHeader.get(CONTENT_LENGTH));
-            return responseBesideBodyLength + responseBodyLength;
+//            // after first access
+//            int responseBesideBodyLength = responseBesidesBody.toString()
+//                    .getBytes(charset).length;
+//            int responseBodyLength = Integer.parseInt(responseHeader.get(CONTENT_LENGTH));
+//            return responseBesideBodyLength + responseBodyLength;
         } catch (IOException e) {
             log.error("WorkImpl preVisit error: ", e);
         }
@@ -209,6 +217,25 @@ public class WorkImpl implements Work {
         List<String> list = Arrays.asList(responseBody.toString().split("\r\n\r\n"));
 
         CrawlerImpl.parse(list, robotList);
+    }
+
+    /**
+     * parse host、uri、protocol and port.
+     *
+     * @param url uniform resource locator, such as https://www.baidu.com/index.html
+     */
+    public void parseHostAndUrl(String url) {
+        try {
+            URL urlObject = new URL(url);
+            protocol = urlObject.getProtocol();
+            host = urlObject.getHost();
+            port = urlObject.getPort() != -1
+                    ? urlObject.getPort() : urlObject.getDefaultPort();
+            uri = urlObject.getPath().startsWith(SLASH)
+                    ? urlObject.getPath() : urlObject.getPath() + SLASH;
+        } catch (MalformedURLException e) {
+            log.error("WorkImpl parseHostAndUrl error: ", e);
+        }
     }
 
 }

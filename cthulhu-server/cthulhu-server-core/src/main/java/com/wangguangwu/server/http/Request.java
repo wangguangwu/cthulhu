@@ -1,5 +1,6 @@
 package com.wangguangwu.server.http;
 
+import com.wangguangwu.server.entity.Symbol;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.wangguangwu.server.util.ParseRequestUtil.parseQueryString;
 
 /**
  * parse http request.
@@ -37,10 +40,12 @@ public class Request implements HttpServletRequest {
      * <p>
      * get information from socketInputStream.
      */
-    @SuppressWarnings("unused")
+
     private InputStream inputStream;
 
     private final Map<String, Object> attributes = new ConcurrentHashMap<>();
+
+    private Map<String, String> parameters = new ConcurrentHashMap<>();
 
     /**
      * inputStream constructor.
@@ -51,23 +56,24 @@ public class Request implements HttpServletRequest {
         this.inputStream = inputStream;
 
         // parse inputStream
-        // buffered array
         byte[] bytes = new byte[1024];
-        // read length
         int len;
-        StringBuilder request = new StringBuilder();
-        // -1: represent the end of socketInputStream
+        StringBuilder requestRead = new StringBuilder();
         if ((len = inputStream.read(bytes)) != -1) {
-            request.append(new String(bytes, 0, len, StandardCharsets.UTF_8));
+            requestRead.append(new String(bytes, 0, len, StandardCharsets.UTF_8));
         }
+        String request = requestRead.toString();
         log.info("request: \r\n{}", request);
 
         // requestLine, such as GET / HTTP/1.1
-        String requestLine = request.toString().split("\r\n")[0];
-        String[] strings = requestLine.split(" ");
+        String requestLine = request.split("\r\n")[0];
+        String[] strings = requestLine.split(Symbol.SPACE);
         this.method = strings[0];
         this.url = strings[1];
-        log.info("requestLine: {}", requestLine);
+        if (url.contains(Symbol.QUESTION_MARK)) {
+            parameters = parseQueryString(url);
+            url = url.substring(0, url.indexOf(Symbol.QUESTION_MARK));
+        }
     }
 
     @Override
@@ -106,7 +112,6 @@ public class Request implements HttpServletRequest {
     }
 
     @Override
-    @SuppressWarnings("unused")
     public String getMethod() {
         return method;
     }
@@ -157,7 +162,6 @@ public class Request implements HttpServletRequest {
     }
 
     @Override
-    @SuppressWarnings({"nls"})
     public StringBuffer getRequestURL() {
         return null;
     }
@@ -232,7 +236,7 @@ public class Request implements HttpServletRequest {
         return null;
     }
 
-    @SuppressWarnings("unused")
+
     public void setMethod(String method) {
         this.method = method;
     }
@@ -241,12 +245,12 @@ public class Request implements HttpServletRequest {
         return url;
     }
 
-    @SuppressWarnings("unused")
+
     public void setUrl(String url) {
         this.url = url;
     }
 
-    @SuppressWarnings("unused")
+
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
@@ -294,7 +298,7 @@ public class Request implements HttpServletRequest {
 
     @Override
     public String getParameter(String name) {
-        return null;
+        return name + ":" + parameters.get(name);
     }
 
     @Override
@@ -304,7 +308,7 @@ public class Request implements HttpServletRequest {
 
     @Override
     public String[] getParameterValues(String name) {
-        return new String[0];
+        return new String[]{parameters.get(name)};
     }
 
     @Override

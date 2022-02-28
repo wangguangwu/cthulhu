@@ -1,4 +1,4 @@
-package com.wangguangwu.client.entity;
+package com.wangguangwu.server.entity;
 
 /**
  * Commonly symbol.
@@ -45,7 +45,7 @@ public class Symbol {
     /**
      * =
      */
-    
+
     public static final String EQUALS = "=";
 
     /**

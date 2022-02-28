@@ -1,6 +1,8 @@
 package com.wangguangwu.controller;
 
+import com.wangguangwu.entity.CthulhuVO;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.hutool.core.io.IoUtil;
@@ -22,6 +24,13 @@ public class CthulhuController {
         String response = "<h1>HelloWorld</h1>";
         log.info("response: {}", response);
         return response;
+    }
+
+    @RequestMapping("helloCthulhu")
+    public CthulhuVO cthulhu(@RequestParam("name") String name, int age) {
+        log.info("name: {}", name);
+        log.info("age: {}", age);
+        return new CthulhuVO(name, age);
     }
 
     @RequestMapping("restart")

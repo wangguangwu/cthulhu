@@ -30,7 +30,6 @@ public class CthulhuServletOutputStream extends ServletOutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        //
         outputStream.write(HttpProtocolUtil.getHttp200(len).getBytes());
         outputStream.write(b, off, len);
     }

@@ -42,7 +42,7 @@ public class RequestProcessor extends Thread {
     @Override
     public void run() {
         try {
-            // parse http request and http response
+            // parse http request and send http response
             Request request = new Request(socket.getInputStream());
             Response response = new Response(socket.getOutputStream());
 

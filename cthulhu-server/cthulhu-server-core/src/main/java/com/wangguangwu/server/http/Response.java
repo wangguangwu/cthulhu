@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Generate response.
@@ -24,6 +26,8 @@ public class Response implements HttpServletResponse {
      * socketOutputStream.
      */
     private final OutputStream outputStream;
+
+    private final Map<String, String> headers = new ConcurrentHashMap<>();
 
     public Response(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -122,7 +126,7 @@ public class Response implements HttpServletResponse {
 
     @Override
     public void addHeader(String name, String value) {
-
+        headers.put(name, value);
     }
 
     @Override
@@ -152,7 +156,7 @@ public class Response implements HttpServletResponse {
 
     @Override
     public String getHeader(String name) {
-        return null;
+        return headers.get(name);
     }
 
     @Override

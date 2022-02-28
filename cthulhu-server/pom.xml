@@ -59,6 +59,7 @@
         <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
         <spring-boot.version>3.0.0-M1</spring-boot.version>
         <cthulhu-server-core.version>1.0.1-SNAPSHOT</cthulhu-server-core.version>
+        <snakeyaml.version>1.30</snakeyaml.version>
     </properties>
 
     <build>
@@ -204,6 +205,12 @@
                 <groupId>com.wangguangwu</groupId>
                 <artifactId>cthulhu-spring-boot-starter</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
             </dependency>
 
             <dependency>
