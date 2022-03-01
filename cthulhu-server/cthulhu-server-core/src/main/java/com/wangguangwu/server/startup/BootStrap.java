@@ -1,5 +1,8 @@
 package com.wangguangwu.server.startup;
 
+import com.wangguangwu.server.entity.Commons;
+import com.wangguangwu.server.http.Request;
+import com.wangguangwu.server.http.Response;
 import com.wangguangwu.server.thread.RequestProcessor;
 import com.wangguangwu.server.util.YamlParseUtil;
 import jakarta.servlet.http.HttpServlet;
@@ -7,6 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -43,41 +49,38 @@ public class BootStrap {
      */
     private Map<String, HttpServlet> servletMap = new HashMap<>();
 
-    /**
-     * project boot entrance.
-     *
-     * @param args args
-     */
     public static void main(String[] args) {
         BootStrap bootStrap = new BootStrap();
-        try {
-            // start a webserver
-            bootStrap.start();
-        } catch (Exception e) {
-            log.error("Start cthulhu error ", e);
-        }
+        bootStrap.await();
     }
 
     /**
      * start a web server and produce service.
      */
     @SuppressWarnings("InfiniteLoopStatement")
-    public void start() throws Exception {
+    public void await() {
 
         loadProperties();
 
         ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
         // create a serverSocket
-        ServerSocket serverSocket =
-                new ServerSocket(port, backlog, InetAddress.getByName(host));
-        log.info("server start on host: {}, port: {}", host, port);
+        ServerSocket serverSocket;
+        Socket socket;
 
-        // listen and handle request
-        while (true) {
-            Socket socket = serverSocket.accept();
-            RequestProcessor requestProcessor = new RequestProcessor(socket, servletMap);
-            threadPoolExecutor.execute(requestProcessor);
+        try {
+            serverSocket = new ServerSocket(port, backlog, InetAddress.getByName(host));
+            log.info("cthulhu server start on host:{}, port: {}", host, port);
+
+            // listen and handle request
+            while (true) {
+                socket = Objects.requireNonNull(serverSocket).accept();
+                RequestProcessor requestProcessor = new RequestProcessor(socket, servletMap);
+                threadPoolExecutor.execute(requestProcessor);
+            }
+        } catch (IOException e) {
+            log.error("cthulhu server error");
+            System.exit(1);
         }
     }
 

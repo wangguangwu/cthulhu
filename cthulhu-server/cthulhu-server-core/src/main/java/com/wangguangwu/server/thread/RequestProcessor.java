@@ -1,5 +1,6 @@
 package com.wangguangwu.server.thread;
 
+import com.wangguangwu.server.entity.Commons;
 import com.wangguangwu.server.http.Request;
 import com.wangguangwu.server.http.Response;
 import jakarta.servlet.http.HttpServlet;
@@ -38,7 +39,6 @@ public class RequestProcessor extends Thread {
         this.servletMap = servletMap;
     }
 
-
     @Override
     public void run() {
         try {
@@ -46,16 +46,25 @@ public class RequestProcessor extends Thread {
             Request request = new Request(socket.getInputStream());
             Response response = new Response(socket.getOutputStream());
 
-            if (servletMap.get(request.getUrl()) != null) {
-                // static resource handling
-                response.outputHtml(request.getUrl());
-            } else {
+            String url = request.getUrl();
+
+            if (servletMap.get(url) != null) {
                 // dynamic resource handling
                 HttpServlet httpServlet = servletMap.get("/");
                 httpServlet.service(request, response);
             }
+            // static resource handling
+            response.outputHtml(url);
+
+            // close the server
+            if (Commons.SHUTDOWN_COMMAND.equalsIgnoreCase(url)) {
+                System.exit(1);
+            }
+
+            socket.close();
         } catch (Exception e) {
             log.error("RequestProcessor run error: ", e);
         }
     }
+
 }

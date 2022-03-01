@@ -1,5 +1,6 @@
 package com.wangguangwu.server.http;
 
+import com.wangguangwu.server.entity.Commons;
 import com.wangguangwu.server.util.HttpProtocolUtil;
 import com.wangguangwu.server.util.StaticResourceUtil;
 import jakarta.servlet.ServletOutputStream;
@@ -51,6 +52,7 @@ public class Response implements HttpServletResponse {
      */
     public void outputHtml(String url) throws IOException {
         // get the absolute path of the file of the static resource to the url
+        url = url.endsWith(Commons.HTML) ? url : url + Commons.HTML;
         String absoluteResourcePath = StaticResourceUtil.getAbsolutePath(url);
 
         File file = new File(absoluteResourcePath);

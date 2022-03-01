@@ -19,7 +19,7 @@ public class CthulhuWebServer implements WebServer {
     @Override
     public void start() throws WebServerException {
         try {
-            bootStrap.start();
+            bootStrap.await();
         } catch (Exception e) {
             throw new WebServerException("Failed to start web server", e);
         }
