@@ -1,7 +1,7 @@
 package com.wangguangwu.client.http;
 
+import com.wangguangwu.client.entity.Commons;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,6 @@ import static com.wangguangwu.client.utils.StringUtil.map2String;
 @Slf4j
 @Getter
 @Setter
-@NoArgsConstructor
 public class Response {
 
     /**
@@ -117,7 +116,14 @@ public class Response {
     public Map<String, String> parse() {
 
         // response line and header and empty line
-        byte[] firstRead = parseInputStream2Bytes(bufferSize);
+        byte[] firstRead = parseInputStream2Bytes(Commons.DEFAULT_BUFFER_SIZE);
+        System.out.println();
+
+//        if (firstRead.length < Commons.DEFAULT_BUFFER_SIZE) {
+//            //
+//
+//
+//        }
 
         // whether the responseLine has been readed
         boolean parseResponseLine = true;
@@ -195,6 +201,10 @@ public class Response {
         // CONTENT_LENGTH
         if (headerMap.containsKey(CONTENT_LENGTH)) {
             responseBodyLength = Integer.parseInt(headerMap.get(CONTENT_LENGTH));
+        } else {
+            // 不含有 CONTENT_LENGTH 响应头
+            byte[] bytes = parseInputStream2Bytes(10240);
+            System.out.println();
         }
 
         // response body content
@@ -238,7 +248,9 @@ public class Response {
         } catch (IOException e) {
             log.error("Response parseInputStream2Bytes error: ", e);
         }
-        return bytes;
+        byte[] content = new byte[readCount];
+        System.arraycopy(bytes, 0, content, 0, readCount);
+        return content;
     }
 
     /**

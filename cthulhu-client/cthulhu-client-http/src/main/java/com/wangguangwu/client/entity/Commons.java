@@ -37,4 +37,8 @@ public class Commons {
      */
     public static final String ALLOW = "Allow";
 
+    /**
+     * default buffer size.
+     */
+    public static final int DEFAULT_BUFFER_SIZE = 1024;
 }

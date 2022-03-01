@@ -12,6 +12,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.wangguangwu.client.entity.Http.*;
@@ -51,26 +53,20 @@ public class WorkImpl implements Work {
         // access the website
         accessWebsite(host, uri, port);
         // parse
-        parseRobotsProtocol(host, port);
+//        parseRobotsProtocol(host, port);
 
-        System.out.println();
     }
 
     private void accessWebsite(String host, String url, int port) {
-        // pre visit the website
-        int responseLength = preVisit(host, url, port);
-
-        // visit again
         try {
             InputStream in = sendRequest(host, url, port);
 
             Response response = new Response(in);
-            response.setBufferSize(responseLength);
             response.setFileName(host + url);
             response.parse();
 
         } catch (IOException e) {
-            log.error("WorkImpl visit error: ", e);
+            log.error("Cthulhu client access website error", e);
         }
     }
 
@@ -99,8 +95,9 @@ public class WorkImpl implements Work {
             while (true) {
                 line = reader.readLine();
                 responseBesidesBody.append(line);
+                log.info("line:{}", line);
                 if (parseLine) {
-                    responseCode = line.split(SPACE)[2];
+                    responseCode = line.split(SPACE)[1];
                     if (badResponse.contains(responseCode)) {
                         log.error("fail to access website: {}", host);
                         throw new BadResponseException("bad response code=========>" + responseCode);
@@ -108,9 +105,9 @@ public class WorkImpl implements Work {
                     parseLine = false;
                     continue;
                 }
-                if (BLANK.equals(line)) {
-                    break;
-                }
+//                if (BLANK.equals(line)) {
+//                    break;
+//                }
                 if (line.contains(SEMICOLON)) {
                     index = line.indexOf(SEMICOLON);
                     key = line.substring(0, index);
@@ -119,22 +116,22 @@ public class WorkImpl implements Work {
                 }
             }
 
-            if (movedResponse.contains(responseCode)) {
+//            if (movedResponse.contains(responseCode)) {
 //                // redirect the new website
 //                String redirectLocation = responseHeader.get("Location");
 //                Map<String, String> hostAndUrl = parseHostAndUrl(redirectLocation, port);
 //                preVisit(hostAndUrl.get(("host")), hostAndUrl.get("url"), Integer.parseInt(hostAndUrl.get("port")));
-            }
+//            }
 
-            if (responseHeader.containsKey(CONTENT_TYPE)
-                    && responseHeader.get(CONTENT_TYPE).contains(CHARSET)) {
+//            if (responseHeader.containsKey(CONTENT_TYPE)
+//                    && responseHeader.get(CONTENT_TYPE).contains(CHARSET)) {
+//
+//                String contentValue = responseHeader.get(CONTENT_TYPE);
+//                int charsetIndex = contentValue.indexOf(CHARSET);
+//                charset = contentValue.substring(charsetIndex + 8);
+//            }
 
-                String contentValue = responseHeader.get(CONTENT_TYPE);
-                int charsetIndex = contentValue.indexOf(CHARSET);
-                charset = contentValue.substring(charsetIndex + 8);
-            }
-
-            websiteCharset.put(host, charset);
+//            websiteCharset.put(host, charset);
 
 //            // after first access
 //            int responseBesideBodyLength = responseBesidesBody.toString()
@@ -163,7 +160,7 @@ public class WorkImpl implements Work {
         Socket socket = port == 80
                 ? new Socket(host, port) : SSLSocketFactory.getDefault().createSocket(host, port);
 
-        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         bufferedWriter.write("GET " + url + SPACE + protocol + "\r\n");
         bufferedWriter.write("HOST: " + host + "\r\n");
         bufferedWriter.write("Accept: */*\r\n");
@@ -173,6 +170,7 @@ public class WorkImpl implements Work {
 
         return socket.getInputStream();
     }
+
 
     /**
      * /**
@@ -211,7 +209,7 @@ public class WorkImpl implements Work {
                 responseBody.append(line);
             }
         } catch (IOException e) {
-            log.error("WorkImpl parseRobotsProtocol error: ", e);
+            log.error("Cthulhu client parseRobotsProtocol error: ", e);
         }
         // ex: User-agent: baidu\r\n Disallow: /\r\n\r\n
         List<String> list = Arrays.asList(responseBody.toString().split("\r\n\r\n"));
@@ -234,7 +232,7 @@ public class WorkImpl implements Work {
             uri = urlObject.getPath().startsWith(SLASH)
                     ? urlObject.getPath() : urlObject.getPath() + SLASH;
         } catch (MalformedURLException e) {
-            log.error("WorkImpl parseHostAndUrl error: ", e);
+            log.error("Cthulhu client parseHostAndUrl error: ", e);
         }
     }
 
