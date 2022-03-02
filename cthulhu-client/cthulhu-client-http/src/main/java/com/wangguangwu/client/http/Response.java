@@ -1,12 +1,14 @@
 package com.wangguangwu.client.http;
 
 import com.wangguangwu.client.entity.Commons;
+import com.wangguangwu.client.entity.Http;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,12 +121,6 @@ public class Response {
         byte[] firstRead = parseInputStream2Bytes(Commons.DEFAULT_BUFFER_SIZE);
         System.out.println();
 
-//        if (firstRead.length < Commons.DEFAULT_BUFFER_SIZE) {
-//            //
-//
-//
-//        }
-
         // whether the responseLine has been readed
         boolean parseResponseLine = true;
 
@@ -161,12 +157,9 @@ public class Response {
                 }
 
                 // parse response header
-                // length of a line
                 int length = i - index;
-                // create a new buffer array
                 byte[] subBytes = new byte[length];
 
-                // copy data to new array
                 System.arraycopy(firstRead, index, subBytes, 0, length);
 
                 // next line
@@ -198,23 +191,46 @@ public class Response {
             }
         }
 
-        // CONTENT_LENGTH
-        if (headerMap.containsKey(CONTENT_LENGTH)) {
-            responseBodyLength = Integer.parseInt(headerMap.get(CONTENT_LENGTH));
+        byte[] responseBodyContent = new byte[0];
+
+        if (firstRead.length < Commons.DEFAULT_BUFFER_SIZE) {
+            // 说明读到结尾，不会继续往下读取
+            responseBodyContent = new byte[remainingLength];
+            System.arraycopy(firstRead, responseBesidesBodyLength, responseBodyContent, 0, remainingLength);
         } else {
-            // 不含有 CONTENT_LENGTH 响应头
-            byte[] bytes = parseInputStream2Bytes(10240);
-            System.out.println();
+            // CONTENT_LENGTH
+            if (headerMap.containsKey(CONTENT_LENGTH)) {
+                responseBodyLength = Integer.parseInt(headerMap.get(CONTENT_LENGTH));
+            } else {
+                // 不含有 CONTENT_LENGTH 响应头
+                //
+                responseBodyLength = 30720;
+            }
         }
 
         // response body content
         int responseBodyRemainLength = responseBodyLength - remainingLength;
-        if (responseBodyRemainLength < 0) {
-            return null;
+        // inputStream 中还有剩余的响应体数据
+        if (responseBodyRemainLength > 0) {
+            responseBodyContent = parseInputStream2Bytes(responseBodyRemainLength);
         }
-        byte[] responseBodyContent = parseInputStream2Bytes(responseBodyRemainLength);
-        responseBody = new String(remainContent, StandardCharsets.UTF_8)
-                + new String(responseBodyContent, StandardCharsets.UTF_8);
+
+        String charset = Commons.DEFAULT_CHARSET.name();
+        if (headerMap.containsKey(Http.CONTENT_TYPE)
+                && headerMap.get(Http.CONTENT_TYPE).contains(Http.CHARSET)) {
+
+            String contentValue = headerMap.get(Http.CONTENT_TYPE);
+            int charsetIndex = contentValue.indexOf(Http.CHARSET);
+            charset = contentValue.substring(charsetIndex + 8);
+        }
+
+        try {
+            responseBody = new String(remainContent, charset)
+                    + new String(responseBodyContent, charset);
+        } catch (UnsupportedEncodingException e) {
+            responseBody = new String(remainContent, Commons.DEFAULT_CHARSET)
+                    + new String(responseBodyContent, Commons.DEFAULT_CHARSET);
+        }
         log.info("responseBody: \r\n{}", responseBody);
         // save data to file
         wholeResponse = responseLine + responseHeader + responseEmptyLine + responseBody;

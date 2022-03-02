@@ -17,8 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class Bootstrap {
 
-//    private String url = "https://www.zhipin.com/hangzhou/";
-    private String url = "http://search.dangdang.com/advsearch";
+    private String url = "https://www.zhipin.com/hangzhou/";
 
     public static void main(String[] args) {
         log.info("client is running...");

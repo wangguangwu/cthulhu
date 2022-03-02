@@ -1,5 +1,8 @@
 package com.wangguangwu.client.entity;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Commonly used field.
  *
@@ -41,4 +44,10 @@ public class Commons {
      * default buffer size.
      */
     public static final int DEFAULT_BUFFER_SIZE = 1024;
+
+    /**
+     * default charset.
+     */
+    public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+
 }

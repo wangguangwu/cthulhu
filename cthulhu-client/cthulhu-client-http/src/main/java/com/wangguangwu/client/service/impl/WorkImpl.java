@@ -1,7 +1,6 @@
 package com.wangguangwu.client.service.impl;
 
 import com.wangguangwu.client.entity.Robot;
-import com.wangguangwu.client.exception.BadResponseException;
 import com.wangguangwu.client.http.Response;
 import com.wangguangwu.client.service.Work;
 import lombok.Data;
@@ -12,11 +11,9 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static com.wangguangwu.client.entity.Http.*;
 import static com.wangguangwu.client.entity.Symbol.*;
 
 
@@ -35,13 +32,13 @@ public class WorkImpl implements Work {
 
     private int port;
 
-    private static List<String> badResponse = List.of("401", "403", "404");
+    private final List<String> badResponse = List.of("401", "403", "404");
 
-    private static List<String> movedResponse = List.of("301", "302");
+    private final List<String> movedResponse = List.of("301", "302");
 
     private static Map<String, String> websiteCharset = new HashMap<>();
 
-    private static String defaultCharset = "utf-8";
+    private final String defaultCharset = "utf-8";
 
     private List<Robot> robotList = new ArrayList<>();
 
@@ -52,8 +49,6 @@ public class WorkImpl implements Work {
 
         // access the website
         accessWebsite(host, uri, port);
-        // parse
-//        parseRobotsProtocol(host, port);
 
     }
 
@@ -70,79 +65,6 @@ public class WorkImpl implements Work {
         }
     }
 
-    /**
-     * pre visit the website to get the encoding format.
-     */
-    private int preVisit(String host, String url, int port) {
-        String charset = defaultCharset;
-        if (websiteCharset.containsKey(host)) {
-            charset = websiteCharset.get(host);
-        }
-        try {
-            InputStream in = sendRequest(host, url, port);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, charset));
-
-            Map<String, String> responseHeader = new HashMap<>();
-
-            String line;
-            String key;
-            String value;
-            int index;
-            boolean parseLine = true;
-            String responseCode = "";
-            StringBuilder responseBesidesBody = new StringBuilder();
-
-            while (true) {
-                line = reader.readLine();
-                responseBesidesBody.append(line);
-                log.info("line:{}", line);
-                if (parseLine) {
-                    responseCode = line.split(SPACE)[1];
-                    if (badResponse.contains(responseCode)) {
-                        log.error("fail to access website: {}", host);
-                        throw new BadResponseException("bad response code=========>" + responseCode);
-                    }
-                    parseLine = false;
-                    continue;
-                }
-//                if (BLANK.equals(line)) {
-//                    break;
-//                }
-                if (line.contains(SEMICOLON)) {
-                    index = line.indexOf(SEMICOLON);
-                    key = line.substring(0, index);
-                    value = line.substring(index + 2);
-                    responseHeader.put(key, value);
-                }
-            }
-
-//            if (movedResponse.contains(responseCode)) {
-//                // redirect the new website
-//                String redirectLocation = responseHeader.get("Location");
-//                Map<String, String> hostAndUrl = parseHostAndUrl(redirectLocation, port);
-//                preVisit(hostAndUrl.get(("host")), hostAndUrl.get("url"), Integer.parseInt(hostAndUrl.get("port")));
-//            }
-
-//            if (responseHeader.containsKey(CONTENT_TYPE)
-//                    && responseHeader.get(CONTENT_TYPE).contains(CHARSET)) {
-//
-//                String contentValue = responseHeader.get(CONTENT_TYPE);
-//                int charsetIndex = contentValue.indexOf(CHARSET);
-//                charset = contentValue.substring(charsetIndex + 8);
-//            }
-
-//            websiteCharset.put(host, charset);
-
-//            // after first access
-//            int responseBesideBodyLength = responseBesidesBody.toString()
-//                    .getBytes(charset).length;
-//            int responseBodyLength = Integer.parseInt(responseHeader.get(CONTENT_LENGTH));
-//            return responseBesideBodyLength + responseBodyLength;
-        } catch (IOException e) {
-            log.error("WorkImpl preVisit error: ", e);
-        }
-        return -1;
-    }
 
 
     /**
@@ -169,52 +91,6 @@ public class WorkImpl implements Work {
         bufferedWriter.flush();
 
         return socket.getInputStream();
-    }
-
-
-    /**
-     * /**
-     * get the robot's protocol of the specified website.
-     *
-     * @param host host
-     * @param port port
-     */
-    private void parseRobotsProtocol(String host, int port) {
-        StringBuilder responseBody = new StringBuilder();
-        try {
-            InputStream in = sendRequest(host, "/robots.txt", port);
-            String charset = websiteCharset.getOrDefault(host, "utf-8");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, charset));
-
-            String line;
-            boolean parseLine = true;
-            boolean parseHeader = true;
-            String responseCode;
-            while ((line = reader.readLine()) != null) {
-                if (parseLine) {
-                    responseCode = line.split(SPACE)[2];
-                    if (badResponse.contains(responseCode)) {
-                        log.error("fail to access website: {}", host);
-                        throw new BadResponseException("bad response code=========>" + responseCode);
-                    }
-                    parseLine = false;
-                    continue;
-                }
-                if (parseHeader) {
-                    if (SPACE.equals(line)) {
-                        parseHeader = false;
-                    }
-                    continue;
-                }
-                responseBody.append(line);
-            }
-        } catch (IOException e) {
-            log.error("Cthulhu client parseRobotsProtocol error: ", e);
-        }
-        // ex: User-agent: baidu\r\n Disallow: /\r\n\r\n
-        List<String> list = Arrays.asList(responseBody.toString().split("\r\n\r\n"));
-
-        CrawlerImpl.parse(list, robotList);
     }
 
     /**
