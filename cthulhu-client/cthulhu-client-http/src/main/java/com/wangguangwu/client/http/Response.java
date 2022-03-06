@@ -3,6 +3,7 @@ package com.wangguangwu.client.http;
 import com.wangguangwu.client.entity.Commons;
 import com.wangguangwu.client.entity.Http;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +30,7 @@ import static com.wangguangwu.client.utils.StringUtil.map2String;
 @Slf4j
 @Getter
 @Setter
+@NoArgsConstructor
 public class Response {
 
     /**
@@ -59,7 +61,7 @@ public class Response {
     /**
      * response header
      */
-    private final Map<String, String> headerMap = new HashMap<>();
+    private Map<String, String> headerMap = new HashMap<>();
 
     /**
      * whole response
@@ -115,11 +117,12 @@ public class Response {
     /**
      * parse the response.
      */
-    public Map<String, String> parse() {
+    public Response parseResponse() {
+
+        Response response = new Response();
 
         // response line and header and empty line
         byte[] firstRead = parseInputStream2Bytes(Commons.DEFAULT_BUFFER_SIZE);
-        System.out.println();
 
         // whether the responseLine has been readed
         boolean parseResponseLine = true;
@@ -149,7 +152,17 @@ public class Response {
                     code = Integer.parseInt(responseLineSpilt[1]);
                     description = responseLineSpilt[2];
 
+                    response.setProtocol(protocol);
+                    response.setCode(code);
+                    response.setDescription(description);
+
                     log.info("responseLine: {}", responseLine);
+
+                    // 404 NOT FOUND
+                    if (Http.BAD_RESPONSE.contains(code)) {
+                        throw new RuntimeException("error response");
+                    }
+
                     parseResponseLine = false;
                     // next line
                     index = i + 2;
@@ -178,6 +191,8 @@ public class Response {
                     log.info("responseHeader: \r\n{}", responseHeader);
                     log.info("responseBesidesBodyLength: {}", responseBesidesBodyLength);
                     log.info("remainingLength: {}", remainingLength);
+
+                    response.setHeaderMap(headerMap);
                     break;
                 }
 
@@ -203,7 +218,6 @@ public class Response {
                 responseBodyLength = Integer.parseInt(headerMap.get(CONTENT_LENGTH));
             } else {
                 // 不含有 CONTENT_LENGTH 响应头
-                //
                 responseBodyLength = 30720;
             }
         }
@@ -231,15 +245,14 @@ public class Response {
             responseBody = new String(remainContent, Commons.DEFAULT_CHARSET)
                     + new String(responseBodyContent, Commons.DEFAULT_CHARSET);
         }
+        response.setResponseBody(responseBody);
         log.info("responseBody: \r\n{}", responseBody);
         // save data to file
         wholeResponse = responseLine + responseHeader + responseEmptyLine + responseBody;
         handleFileName();
         saveData2File(fileName, responseBody);
-        Map<String, String> responseMap = new HashMap<>(2);
-        responseMap.put("response", wholeResponse);
-        responseMap.put("responseBody", responseBody);
-        return responseMap;
+
+        return response;
     }
 
     /**
@@ -255,6 +268,14 @@ public class Response {
         try {
             while (readCount < capacity) {
                 oldReadCount = readCount;
+
+                // 针对响应体不为 0，但是长度不足 1024 字节
+
+                // 针对响应体为 0 的情况
+                if (readCount > 0 &&
+                        new String(bytes, 0, readCount).contains("Content-Length: 0")) {
+                    break;
+                }
                 readCount += inputStream.read(bytes, readCount, capacity - readCount);
                 // i = -1 represent the end of inputStream
                 if (oldReadCount > readCount) {

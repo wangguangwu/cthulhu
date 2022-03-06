@@ -1,8 +1,5 @@
 package com.wangguangwu.server.startup;
 
-import com.wangguangwu.server.entity.Commons;
-import com.wangguangwu.server.http.Request;
-import com.wangguangwu.server.http.Response;
 import com.wangguangwu.server.thread.RequestProcessor;
 import com.wangguangwu.server.util.YamlParseUtil;
 import jakarta.servlet.http.HttpServlet;
@@ -11,8 +8,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;

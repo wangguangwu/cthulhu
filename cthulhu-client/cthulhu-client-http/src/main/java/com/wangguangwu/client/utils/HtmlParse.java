@@ -2,6 +2,8 @@ package com.wangguangwu.client.utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * some methods to operate html.
@@ -21,4 +23,17 @@ public class HtmlParse {
         return document.html();
     }
 
+    public static void parseHtml(String html) {
+        html = formatHtml(html);
+        Document doc = Jsoup.parse(html);
+
+        Element content = doc.getElementById("content");
+        assert content != null;
+        Elements links = content.getElementsByTag("a");
+        for (Element link : links) {
+            String linkHref = link.attr("href");
+            String linkText = link.text();
+            System.out.println(linkHref + ":" + linkText);
+        }
+    }
 }

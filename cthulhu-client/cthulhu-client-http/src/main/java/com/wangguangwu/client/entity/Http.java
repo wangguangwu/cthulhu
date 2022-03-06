@@ -1,5 +1,7 @@
 package com.wangguangwu.client.entity;
 
+import java.util.List;
+
 /**
  * Http common.
  *
@@ -10,13 +12,13 @@ public class Http {
     /**
      * http protocol port.
      */
-    
+
     public static final int HTTP_PORT = 80;
 
     /**
      * https protocol port.
      */
-    
+
     public static final int HTTPS_PORT = 443;
 
     /**
@@ -53,7 +55,17 @@ public class Http {
     /**
      * "Content-Length".
      */
-    
+
     public static final String CONTENT_LENGTH = "Content-Length";
+
+    /**
+     * bad response status code.
+     */
+    public static final List<Integer> BAD_RESPONSE = List.of(401, 403, 404);
+
+    /**
+     * moved response status code.
+     */
+    public static final List<Integer> MOVED_RESPONSE = List.of(301, 302);
 
 }

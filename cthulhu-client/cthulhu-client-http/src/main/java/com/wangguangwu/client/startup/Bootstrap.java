@@ -17,12 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class Bootstrap {
 
-    private String url = "https://www.zhipin.com/hangzhou/";
+//    private String url = "https://www.zhipin.com/hangzhou/";
+    private String url = "https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=";
 
     public static void main(String[] args) {
         log.info("client is running...");
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.start();
+        new Bootstrap().start();
         log.info("client closed");
     }
 

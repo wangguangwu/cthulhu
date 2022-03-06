@@ -1,8 +1,11 @@
 package com.wangguangwu.client.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.wangguangwu.client.entity.Http;
 import com.wangguangwu.client.entity.Robot;
 import com.wangguangwu.client.http.Response;
 import com.wangguangwu.client.service.Work;
+import com.wangguangwu.client.utils.HtmlParse;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +15,6 @@ import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 
 import static com.wangguangwu.client.entity.Symbol.*;
 
@@ -24,32 +26,31 @@ import static com.wangguangwu.client.entity.Symbol.*;
 @Data
 public class WorkImpl implements Work {
 
+    /**
+     * protocol, such as HTTP/1.1
+     */
     private String protocol;
 
+    /**
+     * host, such as www.wangguangwu.com
+     */
     private String host;
 
+    /**
+     * uri, such as "/"
+     */
     private String uri;
 
+    /**
+     * port, such as 8080
+     */
     private int port;
-
-    private final List<String> badResponse = List.of("401", "403", "404");
-
-    private final List<String> movedResponse = List.of("301", "302");
-
-    private static Map<String, String> websiteCharset = new HashMap<>();
-
-    private final String defaultCharset = "utf-8";
-
-    private List<Robot> robotList = new ArrayList<>();
 
     @Override
     public void work(String url) {
-
         parseHostAndUrl(url);
-
         // access the website
         accessWebsite(host, uri, port);
-
     }
 
     private void accessWebsite(String host, String url, int port) {
@@ -58,14 +59,20 @@ public class WorkImpl implements Work {
 
             Response response = new Response(in);
             response.setFileName(host + url);
-            response.parse();
+            Response result = response.parseResponse();
+            // 302
+            if (Http.MOVED_RESPONSE.contains(result.getCode())) {
+                String location = result.getHeaderMap().get("location");
+                accessWebsite(host, location, port);
+            }
+            String responseBody = result.getResponseBody();
+
+//            HtmlParse.parseHtml(responseBody);
 
         } catch (IOException e) {
             log.error("Cthulhu client access website error", e);
         }
     }
-
-
 
     /**
      * send request to website and get response.
@@ -79,9 +86,11 @@ public class WorkImpl implements Work {
     private static InputStream sendRequest(String host, String url, int port) throws IOException {
         String protocol = port == 80 ? "HTTP/1.0" : "HTTP/1.1";
 
+        // create socket to send request
         Socket socket = port == 80
                 ? new Socket(host, port) : SSLSocketFactory.getDefault().createSocket(host, port);
 
+        // write http request into socket
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         bufferedWriter.write("GET " + url + SPACE + protocol + "\r\n");
         bufferedWriter.write("HOST: " + host + "\r\n");
@@ -106,7 +115,9 @@ public class WorkImpl implements Work {
             port = urlObject.getPort() != -1
                     ? urlObject.getPort() : urlObject.getDefaultPort();
             uri = urlObject.getPath().startsWith(SLASH)
-                    ? urlObject.getPath() : urlObject.getPath() + SLASH;
+                    ? urlObject.getPath() : SLASH + urlObject.getPath();
+            uri = StrUtil.isEmpty(urlObject.getQuery())
+                    ? uri : uri + "?" + urlObject.getQuery();
         } catch (MalformedURLException e) {
             log.error("Cthulhu client parseHostAndUrl error: ", e);
         }
