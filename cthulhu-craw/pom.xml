@@ -21,7 +21,7 @@
         <spring-boot-maven-plugin.version>3.0.0-M1</spring-boot-maven-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <cthulhu-client.version>1.0.0</cthulhu-client.version>
-        <cthulhu-server.version>1.0.1-SNAPSHOT</cthulhu-server.version>
+        <cthulhu-server.version>0.0.1-SNAPSHOT</cthulhu-server.version>
         <hutool.version>5.7.20</hutool.version>
     </properties>
 
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.wangguangwu</groupId>
             <artifactId>cthulhu-spring-boot-starter</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

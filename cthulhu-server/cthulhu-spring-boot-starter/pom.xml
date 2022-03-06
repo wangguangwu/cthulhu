@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.wangguangwu</groupId>
         <artifactId>cthulhu-server</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cthulhu-spring-boot-starter</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>cthulhu-spring-boot-starter</name>
     <description>cthulhu-spring-boot-starter</description>
 

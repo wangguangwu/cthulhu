@@ -7,11 +7,11 @@
     <parent>
         <artifactId>cthulhu-client</artifactId>
         <groupId>com.wangguangwu</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cthulhu-client-http</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <description>a mini http client</description>
 
     <properties>

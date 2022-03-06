@@ -6,7 +6,7 @@
 
     <groupId>com.wangguangwu</groupId>
     <artifactId>cthulhu-client</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>a mini http client</description>

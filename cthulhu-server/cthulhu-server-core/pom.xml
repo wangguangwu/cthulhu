@@ -5,12 +5,12 @@
     <parent>
         <artifactId>cthulhu-server</artifactId>
         <groupId>com.wangguangwu</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cthulhu-server-core</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
