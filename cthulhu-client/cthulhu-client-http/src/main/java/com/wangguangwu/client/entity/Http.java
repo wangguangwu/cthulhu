@@ -68,4 +68,6 @@ public class Http {
      */
     public static final List<Integer> MOVED_RESPONSE = List.of(301, 302);
 
+    public static final String LOCATION = "location";
+
 }

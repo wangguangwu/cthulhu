@@ -2,7 +2,7 @@ package com.wangguangwu.client.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.wangguangwu.client.entity.Http;
-import com.wangguangwu.client.entity.Robot;
+import com.wangguangwu.client.entity.SalaryData;
 import com.wangguangwu.client.http.Response;
 import com.wangguangwu.client.service.Work;
 import com.wangguangwu.client.utils.HtmlParse;
@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static com.wangguangwu.client.entity.Symbol.*;
 
@@ -47,31 +48,45 @@ public class WorkImpl implements Work {
     private int port;
 
     @Override
-    public void work(String url) {
+    public List<SalaryData> work(String url) {
+        // parse url
         parseHostAndUrl(url);
         // access the website
-        accessWebsite(host, uri, port);
+        String responseBody = accessWebsite(host, uri, port);
+        // parse responseBody
+        return parseResponseBody(responseBody);
     }
 
-    private void accessWebsite(String host, String url, int port) {
-        try {
-            InputStream in = sendRequest(host, url, port);
+    /**
+     * parse responseBody and get java salary data.
+     * @param responseBody responseBody
+     * @return list of salaryData
+     */
+    private List<SalaryData> parseResponseBody(String responseBody) {
+        return HtmlParse.parseHtml(responseBody);
+    }
 
-            Response response = new Response(in);
-            response.setFileName(host + url);
-            Response result = response.parseResponse();
-            // 302
-            if (Http.MOVED_RESPONSE.contains(result.getCode())) {
-                String location = result.getHeaderMap().get("location");
-                accessWebsite(host, location, port);
-            }
-            String responseBody = result.getResponseBody();
-
-//            HtmlParse.parseHtml(responseBody);
-
-        } catch (IOException e) {
-            log.error("Cthulhu client access website error", e);
+    /**
+     * send http request to website and parse responseBody.
+     *
+     * @param host host
+     * @param url  url
+     * @param port port
+     */
+    private String accessWebsite(String host, String url, int port) {
+        // send http request to host and get response
+        InputStream in = sendRequest(host, url, port);
+        // parse response
+        Response response = new Response(in);
+        response.setFileName(host + url);
+        Response result = response.parseResponse();
+        // 302
+        if (Http.MOVED_RESPONSE.contains(result.getCode())) {
+            String location = result.getHeaderMap().get(Http.LOCATION);
+            // access redirect website
+            return accessWebsite(host, location, port);
         }
+        return result.getResponseBody();
     }
 
     /**
@@ -81,25 +96,28 @@ public class WorkImpl implements Work {
      * @param url  url
      * @param port port
      * @return socket.getInputStream
-     * @throws IOException IOException
      */
-    private static InputStream sendRequest(String host, String url, int port) throws IOException {
-        String protocol = port == 80 ? "HTTP/1.0" : "HTTP/1.1";
+    private InputStream sendRequest(String host, String url, int port) {
+        try {
+            String protocol = port == 80 ? "HTTP/1.0" : "HTTP/1.1";
+            // create socket to send request
+            Socket socket = port == 80
+                    ? new Socket(host, port) : SSLSocketFactory.getDefault().createSocket(host, port);
 
-        // create socket to send request
-        Socket socket = port == 80
-                ? new Socket(host, port) : SSLSocketFactory.getDefault().createSocket(host, port);
+            // write http request into socket
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
+            bufferedWriter.write("GET " + url + SPACE + protocol + "\r\n");
+            bufferedWriter.write("HOST: " + host + "\r\n");
+            bufferedWriter.write("Accept: */*\r\n");
+            bufferedWriter.write("Connection: Keep-Alive\r\n");
+            bufferedWriter.write("\r\n");
+            bufferedWriter.flush();
 
-        // write http request into socket
-        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
-        bufferedWriter.write("GET " + url + SPACE + protocol + "\r\n");
-        bufferedWriter.write("HOST: " + host + "\r\n");
-        bufferedWriter.write("Accept: */*\r\n");
-        bufferedWriter.write("Connection: Keep-Alive\r\n");
-        bufferedWriter.write("\r\n");
-        bufferedWriter.flush();
-
-        return socket.getInputStream();
+            return socket.getInputStream();
+        } catch (IOException e) {
+            log.error("Cthulhu client send http request error", e);
+        }
+        return null;
     }
 
     /**
@@ -107,7 +125,7 @@ public class WorkImpl implements Work {
      *
      * @param url uniform resource locator, such as https://www.baidu.com/index.html
      */
-    public void parseHostAndUrl(String url) {
+    private void parseHostAndUrl(String url) {
         try {
             URL urlObject = new URL(url);
             protocol = urlObject.getProtocol();

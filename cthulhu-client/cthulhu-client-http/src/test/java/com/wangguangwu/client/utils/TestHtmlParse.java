@@ -1,12 +1,6 @@
 package com.wangguangwu.client.utils;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 /**
  * Test HtmlParse util.
@@ -15,22 +9,6 @@ import java.io.IOException;
  */
 public class TestHtmlParse {
 
-    @ParameterizedTest
-    @ValueSource(strings = "target/classes/export/zhipin/hangzhou/root.txt")
-    public void testParseHtml(String path) {
-        StringBuilder html = new StringBuilder();
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(path));
-            String line;
-            while ((line = in.readLine()) != null) {
-                html.append(line);
-            }
-        } catch (IOException e) {
-            // do something
-        }
-        String content = html.toString();
-        HtmlParse.parseHtml(content);
-    }
 
     @Test
     public void test() {

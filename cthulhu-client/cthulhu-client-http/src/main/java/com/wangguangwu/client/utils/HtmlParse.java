@@ -1,9 +1,14 @@
 package com.wangguangwu.client.utils;
 
+import com.wangguangwu.client.entity.SalaryData;
+import com.wangguangwu.client.entity.Symbol;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * some methods to operate html.
@@ -23,17 +28,35 @@ public class HtmlParse {
         return document.html();
     }
 
-    public static void parseHtml(String html) {
+    public static List<SalaryData> parseHtml(String html) {
         html = formatHtml(html);
         Document doc = Jsoup.parse(html);
 
-        Element content = doc.getElementById("content");
-        assert content != null;
-        Elements links = content.getElementsByTag("a");
+        Elements links = doc.select("a[href]");
+
+        List<SalaryData> list = new ArrayList<>();
         for (Element link : links) {
-            String linkHref = link.attr("href");
+//            String linkHref = link.attr("href");
             String linkText = link.text();
-            System.out.println(linkHref + ":" + linkText);
+
+            if ((linkText.startsWith("java") || linkText.startsWith("Java"))) {
+                if (linkText.contains(Symbol.SPACE)) {
+                    SalaryData data = new SalaryData();
+                    int index1 = linkText.indexOf(Symbol.SPACE);
+                    int index2 = linkText.indexOf(Symbol.SPACE, index1 + 1);
+
+                    if (index2 > 0) {
+                        data.setSalary(linkText.substring(index1 + 1, index2));
+                        data.setDescription(linkText.substring(index2 + 1));
+                    } else {
+                        data.setDescription(linkText.substring(index1 + 1));
+                    }
+                    data.setName(linkText.substring(0, index1));
+
+                    list.add(data);
+                }
+            }
         }
+        return list;
     }
 }
