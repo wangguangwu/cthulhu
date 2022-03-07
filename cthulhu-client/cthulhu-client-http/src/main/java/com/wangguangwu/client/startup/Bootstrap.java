@@ -21,13 +21,10 @@ import java.util.List;
 public class Bootstrap {
 
     private String url;
-//    private String url = "https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=";
 
     public List<SalaryData> start() {
-        log.info("client started...");
-        Work work = new WorkImpl();
-        List<SalaryData> data = work.work(url);
-        log.info("client closed");
-        return data;
+        log.info("Cthulhu client access website: {}", url);
+        WorkImpl work = new WorkImpl(url);
+        return work.work();
     }
 }

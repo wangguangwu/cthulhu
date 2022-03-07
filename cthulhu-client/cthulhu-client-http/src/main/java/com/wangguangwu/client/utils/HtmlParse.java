@@ -36,14 +36,15 @@ public class HtmlParse {
 
         List<SalaryData> list = new ArrayList<>();
         for (Element link : links) {
-//            String linkHref = link.attr("href");
+            String linkHref = link.attr("href");
             String linkText = link.text();
 
-            if ((linkText.startsWith("java") || linkText.startsWith("Java"))) {
+            if ((linkText.contains("java") || linkText.contains("Java"))) {
                 if (linkText.contains(Symbol.SPACE)) {
                     SalaryData data = new SalaryData();
                     int index1 = linkText.indexOf(Symbol.SPACE);
                     int index2 = linkText.indexOf(Symbol.SPACE, index1 + 1);
+                    data.setName(linkText.substring(0, index1));
 
                     if (index2 > 0) {
                         data.setSalary(linkText.substring(index1 + 1, index2));
@@ -51,10 +52,13 @@ public class HtmlParse {
                     } else {
                         data.setDescription(linkText.substring(index1 + 1));
                     }
-                    data.setName(linkText.substring(0, index1));
 
                     list.add(data);
                 }
+            }
+
+            if (linkText.contains("java") || linkText.contains("Java")) {
+                System.out.println(linkHref + " : " + linkText);
             }
         }
         return list;

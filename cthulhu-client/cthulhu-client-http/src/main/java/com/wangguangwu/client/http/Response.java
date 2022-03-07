@@ -264,12 +264,12 @@ public class Response {
     private byte[] parseInputStream2Bytes(int capacity) {
         byte[] bytes = new byte[capacity];
         int readCount = 0;
-        int oldReadCount;
+        int oldReadCount = 0;
         try {
             while (readCount < capacity) {
                 oldReadCount = readCount;
 
-                // 针对响应体不为 0，但是长度不足 1024 字节
+                // TODO: 针对响应体不为 0，但是长度不足 1024 字节
 
                 // 针对响应体为 0 的情况
                 if (readCount > 0 &&
@@ -278,6 +278,7 @@ public class Response {
                 }
                 readCount += inputStream.read(bytes, readCount, capacity - readCount);
                 // i = -1 represent the end of inputStream
+                // TODO: 优化
                 if (oldReadCount > readCount) {
                     break;
                 }
