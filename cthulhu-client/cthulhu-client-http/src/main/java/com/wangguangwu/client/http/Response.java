@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -264,7 +262,8 @@ public class Response {
     private byte[] parseInputStream2Bytes(int capacity) {
         byte[] bytes = new byte[capacity];
         int readCount = 0;
-        int oldReadCount = 0;
+        int oldReadCount;
+
         try {
             while (readCount < capacity) {
                 oldReadCount = readCount;

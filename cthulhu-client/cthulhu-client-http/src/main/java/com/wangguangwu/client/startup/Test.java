@@ -11,7 +11,7 @@ public class Test {
 
     public static void main(String[] args) {
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.setUrl("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=100101");
+        bootstrap.setUrl("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=");
         List<SalaryData> data = bootstrap.start();
         data.forEach(System.out::println);
     }

@@ -24,7 +24,7 @@ public class Bootstrap {
 
     public List<SalaryData> start() {
         log.info("Cthulhu client access website: {}", url);
-        WorkImpl work = new WorkImpl(url);
+        Work work = new WorkImpl(url);
         return work.work();
     }
 }

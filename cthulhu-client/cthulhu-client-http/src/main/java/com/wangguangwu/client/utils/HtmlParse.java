@@ -32,6 +32,11 @@ public class HtmlParse {
         html = formatHtml(html);
         Document doc = Jsoup.parse(html);
 
+        Elements elements = doc.select("[class=info-primary]");
+        for (Element element : elements) {
+            System.out.println();
+        }
+
         Elements links = doc.select("a[href]");
 
         List<SalaryData> list = new ArrayList<>();
