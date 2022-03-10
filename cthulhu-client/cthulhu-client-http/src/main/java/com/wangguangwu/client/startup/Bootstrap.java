@@ -1,6 +1,6 @@
 package com.wangguangwu.client.startup;
 
-import com.wangguangwu.client.entity.SalaryData;
+import com.wangguangwu.client.entity.ZhipinData;
 import com.wangguangwu.client.service.Work;
 import com.wangguangwu.client.service.impl.WorkImpl;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class Bootstrap {
 
     private String url;
 
-    public List<SalaryData> start() {
+    public List<ZhipinData> start() {
         log.info("Cthulhu client access website: {}", url);
         Work work = new WorkImpl(url);
         return work.work();

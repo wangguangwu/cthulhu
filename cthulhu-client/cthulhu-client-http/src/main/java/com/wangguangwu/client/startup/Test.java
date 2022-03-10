@@ -1,6 +1,6 @@
 package com.wangguangwu.client.startup;
 
-import com.wangguangwu.client.entity.SalaryData;
+import com.wangguangwu.client.entity.ZhipinData;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class Test {
     public static void main(String[] args) {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.setUrl("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=");
-        List<SalaryData> data = bootstrap.start();
+        List<ZhipinData> data = bootstrap.start();
         data.forEach(System.out::println);
     }
 

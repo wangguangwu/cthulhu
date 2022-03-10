@@ -54,6 +54,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.7.1</maven-surefire-plugin.version>
         <hutool-core.version>5.7.21</hutool-core.version>
+        <fastjson.version>1.2.79</fastjson.version>
     </properties>
 
     <repositories/>
@@ -196,6 +197,12 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-core</artifactId>
                 <version>${hutool-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

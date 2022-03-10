@@ -58,4 +58,9 @@ public class Symbol {
      */
     public static final char POINT = '.';
 
+    /**
+     * &
+     */
+    public static final String AND = "&";
+
 }

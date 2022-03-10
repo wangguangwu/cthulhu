@@ -1,6 +1,6 @@
 package com.wangguangwu.client.service;
 
-import com.wangguangwu.client.entity.SalaryData;
+import com.wangguangwu.client.entity.ZhipinData;
 
 import java.util.List;
 
@@ -14,6 +14,6 @@ public interface Work {
      *
      * @return list of salaryData
      */
-    List<SalaryData> work();
+    List<ZhipinData> work();
 
 }

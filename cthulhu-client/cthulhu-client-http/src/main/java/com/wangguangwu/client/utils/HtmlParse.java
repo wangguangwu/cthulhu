@@ -1,10 +1,9 @@
 package com.wangguangwu.client.utils;
 
-import com.wangguangwu.client.entity.SalaryData;
 import com.wangguangwu.client.entity.Symbol;
+import com.wangguangwu.client.entity.ZhipinData;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -28,44 +27,63 @@ public class HtmlParse {
         return document.html();
     }
 
-    public static List<SalaryData> parseHtml(String html) {
+    public static List<ZhipinData> analysisData(String html) {
         html = formatHtml(html);
         Document doc = Jsoup.parse(html);
 
-        Elements elements = doc.select("[class=info-primary]");
-        for (Element element : elements) {
-            System.out.println();
-        }
+        Elements rows = doc.select("div[class=job-list]").get(0).select("ul");
 
-        Elements links = doc.select("a[href]");
+        List<ZhipinData> list = new ArrayList<>();
 
-        List<SalaryData> list = new ArrayList<>();
-        for (Element link : links) {
-            String linkHref = link.attr("href");
-            String linkText = link.text();
+        if (rows.size() == 0) {
+            System.out.println("没有结果");
+        } else {
+            for (int i = 0; i < rows.get(0).select("li").size(); i++) {
+                ZhipinData data = new ZhipinData();
 
-            if ((linkText.contains("java") || linkText.contains("Java"))) {
-                if (linkText.contains(Symbol.SPACE)) {
-                    SalaryData data = new SalaryData();
-                    int index1 = linkText.indexOf(Symbol.SPACE);
-                    int index2 = linkText.indexOf(Symbol.SPACE, index1 + 1);
-                    data.setName(linkText.substring(0, index1));
+                Elements jobPrimary = rows.get(0).select("li").get(i).select("[class=job-primary]");
+                // basic part
+                Elements infoPrimary = jobPrimary.select("[class=info-primary]");
+                Elements infoAppend = jobPrimary.select("[class=info-append clearfix]");
 
-                    if (index2 > 0) {
-                        data.setSalary(linkText.substring(index1 + 1, index2));
-                        data.setDescription(linkText.substring(index2 + 1));
-                    } else {
-                        data.setDescription(linkText.substring(index1 + 1));
-                    }
+                // primary-box
+                Elements primaryBox = infoPrimary.select("[class=primary-wrapper]")
+                        .select("[class=primary-box]");
+                // company-text
+                Elements companyText = infoPrimary.select("[class=info-company]")
+                        .select("[class=company-text]");
 
-                    list.add(data);
+                data.setCompanyName(companyText.select("h3").text());
+                data.setCompanyInfo(companyText.select("p").text());
+
+                // jobTitle
+                String jobTitle = primaryBox.select("[class=job-title]").text();
+                int index = jobTitle.lastIndexOf(Symbol.SPACE);
+                if (index != -1) {
+                    data.setJob(jobTitle.substring(0, index));
+                    data.setAddress(jobTitle.substring(index + 1));
                 }
-            }
 
-            if (linkText.contains("java") || linkText.contains("Java")) {
-                System.out.println(linkHref + " : " + linkText);
+                // job-limit clearfix
+                String jobLimitClearfix = primaryBox.select("[class=job-limit clearfix]").text();
+                String[] strings = jobLimitClearfix.split(Symbol.SPACE);
+                data.setSalary(strings[0]);
+                data.setAcademicRequirements(strings[1]);
+
+                // info-detail
+                data.setInfoDetail(primaryBox.select("[class=info-detail]").text());
+
+                // tags
+                data.setSkillRequirements(infoAppend.select("[class=tags]").text());
+                // infoDesc
+                data.setInfoDesc(infoAppend.select("[class=info-desc]").text());
+
+                list.add(data);
+                System.out.println(data);
+
             }
         }
+
         return list;
     }
 }

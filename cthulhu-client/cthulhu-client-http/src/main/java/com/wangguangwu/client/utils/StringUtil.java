@@ -2,7 +2,7 @@ package com.wangguangwu.client.utils;
 
 import com.wangguangwu.client.entity.Symbol;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * some methods to operate string.
@@ -25,4 +25,22 @@ public class StringUtil {
         return result.toString();
     }
 
+    public static Map<String, String> parseQueryString(String url) {
+        String queryString = url.contains(Symbol.QUESTION_MARK)
+                ? url.substring(url.indexOf(Symbol.QUESTION_MARK) + 1) : url;
+        Map<String, String> result = new HashMap<>();
+        List<String> params = new ArrayList<>();
+        if (queryString.contains(Symbol.AND)) {
+            params = Arrays.asList(queryString.split(Symbol.AND));
+        } else {
+            params.add(queryString);
+        }
+        params.forEach(param -> {
+            if (param.contains(Symbol.EQUALS)) {
+                int index = param.indexOf(Symbol.EQUALS);
+                result.put(param.substring(0, index), param.substring(index + 1));
+            }
+        });
+        return result;
+    }
 }
