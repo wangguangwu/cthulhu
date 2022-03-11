@@ -16,7 +16,7 @@ public class ZhipinData {
     /**
      * job
      */
-    private String job;
+    private String jobTitle;
 
     /**
      * address
