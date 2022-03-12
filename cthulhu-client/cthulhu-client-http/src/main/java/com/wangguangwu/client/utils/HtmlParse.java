@@ -1,5 +1,6 @@
 package com.wangguangwu.client.utils;
 
+import com.wangguangwu.client.entity.DataParse;
 import com.wangguangwu.client.entity.Symbol;
 import com.wangguangwu.client.entity.ZhipinData;
 import org.jsoup.Jsoup;
@@ -40,7 +41,7 @@ public class HtmlParse {
         if (rows.size() == 0) {
             System.out.println("没有结果");
         } else {
-            for (int i = 0; i < rows.get(0).select("li").size(); i++) {
+            for (int i = 0; i < rows.get(0).select(DataParse.LI).size(); i++) {
                 ZhipinData data = new ZhipinData();
 
                 Elements jobPrimary = rows.get(0).select("li").get(i).select("[class=job-primary]");
