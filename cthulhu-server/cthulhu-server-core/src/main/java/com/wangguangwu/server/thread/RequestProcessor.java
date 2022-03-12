@@ -48,13 +48,9 @@ public class RequestProcessor extends Thread {
 
             String url = request.getUrl();
 
-            if (servletMap.get(url) != null) {
-                // dynamic resource handling
-                HttpServlet httpServlet = servletMap.get("/");
-                httpServlet.service(request, response);
-            }
-            // static resource handling
-            response.outputHtml(url);
+            // dynamic resource handling
+            HttpServlet httpServlet = servletMap.get("/");
+            httpServlet.service(request, response);
 
             // close the server
             if (Commons.SHUTDOWN_COMMAND.equalsIgnoreCase(url)) {

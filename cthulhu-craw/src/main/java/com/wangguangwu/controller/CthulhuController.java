@@ -1,5 +1,7 @@
 package com.wangguangwu.controller;
 
+import com.wangguangwu.client.entity.ZhipinData;
+import com.wangguangwu.client.startup.Bootstrap;
 import com.wangguangwu.entity.CthulhuVO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * Project entry.
@@ -40,6 +44,14 @@ public class CthulhuController {
         log.info("outputStream: {}", IoUtil.read(exec.getInputStream()));
         log.error("errorStream: {}", IoUtil.read(exec.getErrorStream()));
         return "Restart server success";
+    }
+
+    @RequestMapping("crawData")
+    public void crawData() {
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.setUrl("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=");
+        List<ZhipinData> data = bootstrap.start();
+        data.forEach(System.out::println);
     }
 
 }
