@@ -12,39 +12,29 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ZhipinData {
+    
+    private String jobName;
 
-    /**
-     * job
-     */
-    private String jobTitle;
+    private String jobSalary;
 
-    /**
-     * address
-     */
-    private String address;
+    private String jobEducationRequire;
 
-    /**
-     * salary
-     */
-    private String salary;
+    private String jobSkillRequire;
 
-    /**
-     * academic requirements
-     */
-    private String academicRequirements;
+    private String jobInfoDesc;
+
+    
+    //======================================
 
     private String companyName;
 
-    private String companyInfo;
+    private String companyAddress;
 
-    private String infoDetail;
+    private String companyIndustry;
 
-    /**
-     * skill requirements, such as SQL redis and  so on
-     */
-    private String skillRequirements;
+    private String companyStatus;
 
-    private String infoDesc;
+    private String companySize;
 
     @Override
     public String toString() {

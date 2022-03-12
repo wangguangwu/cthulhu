@@ -9,6 +9,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wangguangwu.client.utils.StringUtil.findFirstIndexNumberOfStr;
+
 /**
  * some methods to operate html.
  *
@@ -54,29 +56,41 @@ public class HtmlParse {
                         .select("[class=company-text]");
 
                 data.setCompanyName(companyText.select("h3").text());
-                data.setCompanyInfo(companyText.select("p").text());
+
+                final Elements p = companyText.select("p");
+                final String companyInfo = p.text();
+                // companyIndustry
+                final String companyIndustry = p.select("a").text();
+
+                data.setCompanyIndustry(companyIndustry);
+                String companyStatus = companyInfo.substring(companyIndustry.length());
+
+                int statusIndex = findFirstIndexNumberOfStr(companyStatus);
+
+                if (statusIndex > 0) {
+                    data.setCompanySize(companyStatus.substring(statusIndex));
+                    companyStatus = companyStatus.substring(0, statusIndex);
+                }
+                data.setCompanyStatus(companyStatus);
 
                 // jobTitle
                 String jobTitle = primaryBox.select("[class=job-title]").text();
                 int index = jobTitle.lastIndexOf(Symbol.SPACE);
                 if (index != -1) {
-                    data.setJob(jobTitle.substring(0, index));
-                    data.setAddress(jobTitle.substring(index + 1));
+                    data.setJobName(jobTitle.substring(0, index));
+                    data.setCompanyAddress(jobTitle.substring(index + 1));
                 }
 
                 // job-limit clearfix
                 String jobLimitClearfix = primaryBox.select("[class=job-limit clearfix]").text();
                 String[] strings = jobLimitClearfix.split(Symbol.SPACE);
-                data.setSalary(strings[0]);
-                data.setAcademicRequirements(strings[1]);
-
-                // info-detail
-                data.setInfoDetail(primaryBox.select("[class=info-detail]").text());
+                data.setJobSalary(strings[0]);
+                data.setJobEducationRequire(strings[1]);
 
                 // tags
-                data.setSkillRequirements(infoAppend.select("[class=tags]").text());
+                data.setJobSkillRequire(infoAppend.select("[class=tags]").text());
                 // infoDesc
-                data.setInfoDesc(infoAppend.select("[class=info-desc]").text());
+                data.setJobInfoDesc(infoAppend.select("[class=info-desc]").text());
 
                 list.add(data);
                 System.out.println(data);

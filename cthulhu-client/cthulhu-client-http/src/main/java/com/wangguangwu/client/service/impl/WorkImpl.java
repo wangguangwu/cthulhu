@@ -78,7 +78,7 @@ public class WorkImpl implements Work {
     @Override
     public List<ZhipinData> work() {
         // send http request to host and get response
-        InputStream in = sendRequest(host, uri, port, "__zp_stoken__=8c31dKUgZRUI%2FLWwUVXklWzNtVTA1DUAdcQMgDSRTLkstNF0tbERLRH8jJ18ufCRfHnZfOl9DXUJEJjhnMEIieWpAbk5Gdmg1IXEFKAEfSkQzEUIKLTRRKAJZFU9ZKglNXE9tTi08UD94PDk%3D;");
+        InputStream in = sendRequest(host, uri, port, "__zp_stoken__=b34ddPEUONk1ZCn8mJ0RmEFUvPXBASnNFHm5zXjxRfhQ6QjFMW0ctTAc7aSJafCcFBXYJL01DJG4YZDpnNm8oZBYaVBxHG3hUC2kPKAtAOwwlEU0RLkosGS4VYilQHgROR087Wz88UE1RITQ%3D;");
         // access the website
         String responseBody = parseResponse(in);
         // parse responseBody
