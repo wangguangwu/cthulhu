@@ -24,6 +24,8 @@
         <cthulhu-server.version>0.0.1-SNAPSHOT</cthulhu-server.version>
         <hutool.version>5.7.20</hutool.version>
         <cthulhu-client-http.version>0.0.1-SNAPSHOT</cthulhu-client-http.version>
+        <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
     </properties>
 
     <dependencies>
@@ -93,6 +95,19 @@
             <artifactId>cthulhu-client-http</artifactId>
             <version>${cthulhu-client-http.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

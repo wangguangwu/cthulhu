@@ -1,7 +1,8 @@
-package com.wangguangwu.service;/**
- *
- *
+package com.wangguangwu.service;
+
+/**
  * @author wangguangwu
  */
 public class CthulhuService {
+
 }
