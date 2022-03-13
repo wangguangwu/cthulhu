@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class Response implements HttpServletResponse {
      */
     public void output(String content) throws IOException {
         // write http response to socketOutputStream
-        outputStream.write(content.getBytes());
+        outputStream.write(content.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -158,6 +159,9 @@ public class Response implements HttpServletResponse {
 
     @Override
     public String getHeader(String name) {
+        if ("Content-Type".equals(name)) {
+            return "text/html;charset=UTF-8";
+        }
         return headers.get(name);
     }
 
@@ -178,7 +182,7 @@ public class Response implements HttpServletResponse {
 
     @Override
     public String getContentType() {
-        return null;
+        return "text/html;charset=UTF-8";
     }
 
     @Override
@@ -198,7 +202,7 @@ public class Response implements HttpServletResponse {
 
     @Override
     public void setContentLength(int len) {
-
+        System.out.println();
     }
 
     @Override

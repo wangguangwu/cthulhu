@@ -1,5 +1,6 @@
 package com.wangguangwu.client.entity;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,13 +62,16 @@ public class Http {
     /**
      * bad response status code.
      */
-    public static final List<Integer> BAD_RESPONSE = List.of(401, 403, 404);
+    public static final List<Integer> BAD_RESPONSE = Arrays.asList(401, 403, 404);
 
     /**
      * moved response status code.
      */
-    public static final List<Integer> MOVED_RESPONSE = List.of(301, 302);
+    public static final List<Integer> MOVED_RESPONSE = Arrays.asList(301, 302);
 
+    /**
+     * location:
+     */
     public static final String LOCATION = "location";
 
 }

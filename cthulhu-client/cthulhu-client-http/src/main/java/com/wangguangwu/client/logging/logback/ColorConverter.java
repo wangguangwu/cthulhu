@@ -1,5 +1,6 @@
 package com.wangguangwu.client.logging.logback;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -45,6 +46,13 @@ public class ColorConverter extends CompositeConverter<ILoggingEvent> {
         return toAnsiString(in, element);
     }
 
+    /**
+     * toString
+     *
+     * @param in      string
+     * @param element element
+     * @return string
+     */
     protected String toAnsiString(String in, AnsiElement element) {
         return AnsiOutput.toString(element, in);
     }

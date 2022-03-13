@@ -59,7 +59,7 @@ public class Symbol {
     public static final char POINT = '.';
 
     /**
-     * &
+     * and
      */
     public static final String AND = "&";
 

@@ -6,6 +6,7 @@ import jakarta.servlet.WriteListener;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author wangguangwu
@@ -30,7 +31,7 @@ public class CthulhuServletOutputStream extends ServletOutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        outputStream.write(HttpProtocolUtil.getHttp200(len).getBytes());
+        outputStream.write(HttpProtocolUtil.getHttp200(len).getBytes(StandardCharsets.UTF_8));
         outputStream.write(b, off, len);
     }
 

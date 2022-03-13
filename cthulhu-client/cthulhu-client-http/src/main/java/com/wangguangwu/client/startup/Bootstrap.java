@@ -22,9 +22,16 @@ public class Bootstrap {
 
     private String url;
 
+    private String cookie;
+
+    /**
+     * start cthulhu
+     *
+     * @return data
+     */
     public List<ZhipinData> start() {
         log.info("Cthulhu client access website: {}", url);
-        Work work = new WorkImpl(url);
+        Work work = new WorkImpl(url, cookie);
         return work.work();
     }
 }

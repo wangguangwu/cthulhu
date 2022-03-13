@@ -14,9 +14,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <description>a mini http client</description>
 
-    <properties>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

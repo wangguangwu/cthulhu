@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author wangguangwu
  */
 @Slf4j
+@MapperScan("com.wangguangwu.mapper")
 @SpringBootApplication
 public class CthulhuCrawApplication {
 

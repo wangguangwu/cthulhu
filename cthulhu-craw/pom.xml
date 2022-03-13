@@ -12,7 +12,7 @@
 
     <groupId>com.wangguangwu</groupId>
     <artifactId>cthulhu-craw</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>cthulhu-craw</name>
     <description>cthulhu-craw</description>
     <properties>
@@ -20,12 +20,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot-maven-plugin.version>3.0.0-M1</spring-boot-maven-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <cthulhu-client.version>1.0.0</cthulhu-client.version>
+        <cthulhu-client.version>0.0.1-SNAPSHOT</cthulhu-client.version>
         <cthulhu-server.version>0.0.1-SNAPSHOT</cthulhu-server.version>
         <hutool.version>5.7.20</hutool.version>
         <cthulhu-client-http.version>0.0.1-SNAPSHOT</cthulhu-client-http.version>
-        <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
         <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
+        <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
+        <freemarker.version>2.3.31</freemarker.version>
+        <mybatis-generator-maven-plugin.version>1.4.1</mybatis-generator-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -96,17 +100,47 @@
             <version>${cthulhu-client-http.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis-spring-boot-starter.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector-java.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wangguangwu</groupId>
+            <artifactId>cthulhu-client-http</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.baomidou</groupId>-->
+        <!--            <artifactId>mybatis-plus</artifactId>-->
+        <!--            <version>${mybatis-plus.version}</version>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.baomidou</groupId>-->
+        <!--            <artifactId>mybatis-plus-generator</artifactId>-->
+        <!--            <version>${mybatis-plus-generator.version}</version>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.freemarker</groupId>-->
+        <!--            <artifactId>freemarker</artifactId>-->
+        <!--            <version>${freemarker.version}</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 
@@ -146,6 +180,24 @@
                         </bootclasspath>
                         <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
                     </compilerArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${mybatis-generator-maven-plugin.version}</version>
+                <!--整合逆向工程时，插件需要的 jar 并不是用主项目里面的，需要额外引入-->
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql-connector-java.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/builder/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
         </plugins>

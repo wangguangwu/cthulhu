@@ -7,7 +7,6 @@ import com.wangguangwu.client.entity.Symbol;
 import com.wangguangwu.client.entity.ZhipinData;
 import com.wangguangwu.client.http.Response;
 import com.wangguangwu.client.service.Work;
-import com.wangguangwu.client.utils.HtmlParse;
 import com.wangguangwu.client.utils.TokenUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -62,12 +61,15 @@ public class WorkImpl implements Work {
      */
     private int port;
 
+    private String cookie;
+
     /**
      * parse url.
      *
      * @param url such as https://www.baidu.com
      */
-    public WorkImpl(String url) {
+    public WorkImpl(String url, String cookie) {
+        this.cookie = cookie;
         try {
             URL urlObject = new URL(url);
             protocol = urlObject.getProtocol();
@@ -86,7 +88,7 @@ public class WorkImpl implements Work {
     @Override
     public List<ZhipinData> work() {
         // send http request to host and get response
-        InputStream in = sendRequest(host, uri, port, "__zp_stoken__=b34ddPEUONk1ZCn8mJ0RmEFUvPXBASnNFHm5zXjxRfhQ6QjFMW0ctTAc7aSJafCcFBXYJL01DJG4YZDpnNm8oZBYaVBxHG3hUC2kPKAtAOwwlEU0RLkosGS4VYilQHgROR087Wz88UE1RITQ%3D;");
+        InputStream in = sendRequest(host, uri, port, cookie);
         // access the website
         String responseBody = parseResponse(in);
         // parse responseBody

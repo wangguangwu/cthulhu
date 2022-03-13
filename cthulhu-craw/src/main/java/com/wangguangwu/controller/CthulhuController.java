@@ -3,6 +3,8 @@ package com.wangguangwu.controller;
 import com.wangguangwu.client.entity.ZhipinData;
 import com.wangguangwu.client.startup.Bootstrap;
 import com.wangguangwu.entity.CthulhuVO;
+import com.wangguangwu.service.CthulhuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +25,13 @@ import java.util.List;
 @RequestMapping("cthulhu")
 public class CthulhuController {
 
+    private final CthulhuService cthulhuService;
+
+    @Autowired
+    public CthulhuController(CthulhuService cthulhuService) {
+        this.cthulhuService = cthulhuService;
+    }
+
     @RequestMapping("helloWorld")
     public String sendResponse() {
         String response = "<h1>HelloWorld</h1>";
@@ -38,7 +47,7 @@ public class CthulhuController {
     }
 
     @RequestMapping("restart")
-    public String restart(){
+    public String restart() {
         // The absolute path of the script on the server.
         Process exec = RuntimeUtil.exec("bash /root/workspace/deploy.sh");
         log.info("outputStream: {}", IoUtil.read(exec.getInputStream()));
@@ -50,8 +59,15 @@ public class CthulhuController {
     public void crawData() {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.setUrl("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=");
+        bootstrap.setCookie("__zp_stoken__=f933dWCQzBFUoJ2d1RTsRciN5Ok42PyV%2BXG8UCw83GhQCSDIpJDwOPHgkcxEOZx5WR0dNSyJ%2FFy1fMBhAGQASRDAjBn4XUXtdfC05DzgFMBR%2BIAkwWE5cOV8EKEl7DHgdBX5%2FPzhfNFVgfhY%3D;");
         List<ZhipinData> data = bootstrap.start();
         data.forEach(System.out::println);
+        cthulhuService.saveData(data);
+    }
+
+    @RequestMapping("queryData")
+    public String queryData() {
+        return cthulhuService.queryData();
     }
 
 }

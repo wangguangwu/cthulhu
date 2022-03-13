@@ -49,6 +49,7 @@ public class FileUtil {
      * create the file if it does not exist.
      *
      * @param fileName name of the file, such as "helloWorld" and "HelloWorld.txt"
+     * @return string
      */
     public static String createFile(String fileName) {
         // zhipin/robots.txt

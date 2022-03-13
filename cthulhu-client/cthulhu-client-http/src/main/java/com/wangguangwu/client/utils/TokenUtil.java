@@ -10,6 +10,7 @@ public class TokenUtil {
     /**
      * get zp_stoken from www.zhipin.com
      *
+     * @param url url
      * @return zp_stoken
      */
     public static String getZpToken(String url) {

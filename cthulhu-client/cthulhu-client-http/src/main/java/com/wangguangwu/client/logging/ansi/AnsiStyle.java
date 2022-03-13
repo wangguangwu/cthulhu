@@ -10,20 +10,40 @@ package com.wangguangwu.client.logging.ansi;
 public enum AnsiStyle implements AnsiElement {
 
     /**
-     * ansiStyle.
+     * NORMAL
      */
     NORMAL("0"),
 
+    /**
+     * BOLD
+     */
     BOLD("1"),
 
+    /**
+     * FAINT
+     */
     FAINT("2"),
 
+    /**
+     * ITALIC
+     */
     ITALIC("3"),
 
+    /**
+     * UNDERLINE
+     */
     UNDERLINE("4");
 
+    /**
+     * code
+     */
     private final String code;
 
+    /**
+     * construction method
+     *
+     * @param code code
+     */
     AnsiStyle(String code) {
         this.code = code;
     }

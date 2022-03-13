@@ -114,6 +114,8 @@ public class Response {
 
     /**
      * parse the response.
+     *
+     * @return response
      */
     public Response parseResponse() {
 
@@ -185,10 +187,6 @@ public class Response {
                     System.arraycopy(firstRead, index, remainContent, 0, remainingLength);
                     // response header
                     responseHeader = map2String(headerMap);
-
-                    log.info("responseHeader: \r\n{}", responseHeader);
-                    log.info("responseBesidesBodyLength: {}", responseBesidesBodyLength);
-                    log.info("remainingLength: {}", remainingLength);
 
                     response.setHeaderMap(headerMap);
                     break;

@@ -29,6 +29,12 @@ public class StringUtil {
         return result.toString();
     }
 
+    /**
+     * parseQueryString
+     *
+     * @param url url
+     * @return queryString
+     */
     public static Map<String, String> parseQueryString(String url) {
         String queryString = url.contains(Symbol.QUESTION_MARK)
                 ? url.substring(url.indexOf(Symbol.QUESTION_MARK) + 1) : url;

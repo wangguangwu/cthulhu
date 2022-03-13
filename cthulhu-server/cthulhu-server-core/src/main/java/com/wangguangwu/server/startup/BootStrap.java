@@ -74,7 +74,7 @@ public class BootStrap {
                 threadPoolExecutor.execute(requestProcessor);
             }
         } catch (IOException e) {
-            log.error("cthulhu server error");
+            log.error("cthulhu server error", e);
             System.exit(1);
         }
     }
