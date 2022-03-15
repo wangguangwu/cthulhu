@@ -1,13 +1,16 @@
 package com.wangguangwu.client.service.impl;
 
-import cn.hutool.core.util.StrUtil;
+import com.wangguangwu.client.builder.Builder;
+import com.wangguangwu.client.builder.RequestBuilder;
 import com.wangguangwu.client.entity.DataParse;
 import com.wangguangwu.client.entity.Http;
 import com.wangguangwu.client.entity.Symbol;
 import com.wangguangwu.client.entity.ZhipinData;
+import com.wangguangwu.client.http.Request;
 import com.wangguangwu.client.http.Response;
 import com.wangguangwu.client.service.Work;
-import com.wangguangwu.client.utils.TokenUtil;
+import com.wangguangwu.client.utils.BossUtil;
+import com.wangguangwu.client.utils.HtmlParse;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -17,15 +20,12 @@ import org.jsoup.select.Elements;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.wangguangwu.client.entity.Symbol.*;
-import static com.wangguangwu.client.utils.HtmlParse.formatHtml;
 import static com.wangguangwu.client.utils.StringUtil.findFirstIndexNumberOfStr;
 
 
@@ -36,59 +36,23 @@ import static com.wangguangwu.client.utils.StringUtil.findFirstIndexNumberOfStr;
 @Data
 public class WorkImpl implements Work {
 
-    /**
-     * url, such as https://www.baidu.com
-     */
-    public String url;
-
-    /**
-     * protocol, such as HTTP/1.1
-     */
-    private String protocol;
-
-    /**
-     * host, such as www.wangguangwu.com
-     */
-    private String host;
-
-    /**
-     * uri, such as "/"
-     */
-    private String uri;
-
-    /**
-     * port, such as 8080
-     */
-    private int port;
-
-    private String cookie;
+    private Request request;
 
     /**
      * parse url.
      *
      * @param url such as https://www.baidu.com
      */
-    public WorkImpl(String url, String cookie) {
-        this.cookie = cookie;
-        try {
-            URL urlObject = new URL(url);
-            protocol = urlObject.getProtocol();
-            host = urlObject.getHost();
-            port = urlObject.getPort() != -1
-                    ? urlObject.getPort() : urlObject.getDefaultPort();
-            uri = urlObject.getPath().startsWith(SLASH)
-                    ? urlObject.getPath() : SLASH + urlObject.getPath();
-            uri = StrUtil.isEmpty(urlObject.getQuery())
-                    ? uri : uri + "?" + urlObject.getQuery();
-        } catch (MalformedURLException e) {
-            log.error("Cthulhu client parseUrl error", e);
-        }
+    public WorkImpl(String url) {
+        Builder builder = new RequestBuilder();
+        request = builder.url(url).cookies(BossUtil.getZpsToken())
+                .parse();
     }
 
     @Override
     public List<ZhipinData> work() {
         // send http request to host and get response
-        InputStream in = sendRequest(host, uri, port, cookie);
+        InputStream in = sendRequest(request);
         // access the website
         String responseBody = parseResponse(in);
         // parse responseBody
@@ -104,14 +68,14 @@ public class WorkImpl implements Work {
     private String parseResponse(InputStream in) {
         // parse response
         Response response = new Response(in);
-        response.setFileName(host + uri);
+        response.setFileName(request.getHost() + request.getUri());
         Response result = response.parseResponse();
         // 302
         if (Http.MOVED_RESPONSE.contains(result.getCode())) {
             String location = result.getHeaderMap().get(Http.LOCATION);
             // access redirect website
-            String cookie = TokenUtil.getZpToken(location);
-            return parseResponse(sendRequest(host, location, port, cookie));
+            request.setUrl(location);
+            return parseResponse(sendRequest(request));
         }
         return result.getResponseBody();
     }
@@ -130,12 +94,14 @@ public class WorkImpl implements Work {
     /**
      * send request to website and get response.
      *
-     * @param host host
-     * @param url  url
-     * @param port port
+     * @param request request
      * @return socketInputStream
      */
-    private InputStream sendRequest(String host, String url, int port, String cookie) {
+    private InputStream sendRequest(Request request) {
+        String host = request.getHost();
+        String url = request.getUrl();
+        int port = request.getPort();
+        String cookies = request.getCookies();
         try {
             InetAddress inetAddress = InetAddress.getByName(host);
             String protocol = port == 80 ? "HTTP/1.0" : "HTTP/1.1";
@@ -154,12 +120,8 @@ public class WorkImpl implements Work {
             bufferedWriter.write("User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:97.0) Gecko/20100101 Firefox/97.0\r\n");
             bufferedWriter.write("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r\n");
             bufferedWriter.write("Accept-Language: en-US,en;q=0.5\r\n");
-            // TODO：gzip decrypt
             bufferedWriter.write("Connection: Keep-Alive\r\n");
-            if (!StrUtil.isEmpty(cookie)) {
-                bufferedWriter.write("Cookie: " + cookie + "\r\n");
-            }
-            bufferedWriter.write("Referer: https://www.zhipin.com/web/common/security-check.html?seed=KZwFuez5EFZc0c%2F8bsInOLZkHG5%2FQWED4X%2FxzsvB8AY%3D&name=e5e75d46&ts=1646817278645&callbackUrl=%2Fjob_detail%2F%3Fquery%3Djava%26city%3D101210100%26industry%3D%26position%3D&srcReferer=\r\n");
+            bufferedWriter.write("Cookie: " + cookies + "\r\n");
             bufferedWriter.write("Upgrade-Insecure-Requests: 1\r\n");
             bufferedWriter.write("Sec-Fetch-Dest: document\r\n");
             bufferedWriter.write("Sec-Fetch-Mode: navigate\r\n");
@@ -183,7 +145,7 @@ public class WorkImpl implements Work {
      * @return zhipinData
      */
     private List<ZhipinData> analysisData(String html) {
-        html = formatHtml(html);
+        html = HtmlParse.formatHtml(html);
         Document doc = Jsoup.parse(html);
 
         Elements rows = new Elements();
@@ -250,11 +212,8 @@ public class WorkImpl implements Work {
                 data.setJobInfoDesc(infoAppend.select("[class=info-desc]").text());
 
                 list.add(data);
-                System.out.println(data);
-
             }
         }
-
         return list;
     }
 

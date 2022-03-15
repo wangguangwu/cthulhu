@@ -58,11 +58,10 @@ public class CthulhuController {
     @RequestMapping("crawData")
     public void crawData() {
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.setUrl("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=");
-        bootstrap.setCookie("__zp_stoken__=f933dWCQzBFUoJ2d1RTsRciN5Ok42PyV%2BXG8UCw83GhQCSDIpJDwOPHgkcxEOZx5WR0dNSyJ%2FFy1fMBhAGQASRDAjBn4XUXtdfC05DzgFMBR%2BIAkwWE5cOV8EKEl7DHgdBX5%2FPzhfNFVgfhY%3D;");
-        List<ZhipinData> data = bootstrap.start();
+        List<ZhipinData> data
+                = bootstrap.url("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=").start();
         data.forEach(System.out::println);
-        cthulhuService.saveData(data);
+//        cthulhuService.saveData(data);
     }
 
     @RequestMapping("queryData")

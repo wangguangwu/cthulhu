@@ -3,8 +3,6 @@ package com.wangguangwu.client.startup;
 import com.wangguangwu.client.entity.ZhipinData;
 import com.wangguangwu.client.service.Work;
 import com.wangguangwu.client.service.impl.WorkImpl;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -16,13 +14,14 @@ import java.util.List;
  * @author wangguangwu
  */
 @Slf4j
-@Getter
-@Setter
 public class Bootstrap {
 
     private String url;
 
-    private String cookie;
+    public Bootstrap url(String url) {
+        this.url = url;
+        return this;
+    }
 
     /**
      * start cthulhu
@@ -31,7 +30,7 @@ public class Bootstrap {
      */
     public List<ZhipinData> start() {
         log.info("Cthulhu client access website: {}", url);
-        Work work = new WorkImpl(url, cookie);
+        Work work = new WorkImpl(url);
         return work.work();
     }
 }
