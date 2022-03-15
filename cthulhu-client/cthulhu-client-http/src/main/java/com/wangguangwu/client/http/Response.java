@@ -1,7 +1,9 @@
 package com.wangguangwu.client.http;
 
+import com.alibaba.fastjson.JSON;
 import com.wangguangwu.client.entity.Commons;
 import com.wangguangwu.client.entity.Http;
+import com.wangguangwu.client.entity.Symbol;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +16,6 @@ import java.util.Map;
 
 import static com.wangguangwu.client.entity.Commons.CONTENT_LENGTH;
 import static com.wangguangwu.client.entity.Symbol.*;
-import static com.wangguangwu.client.utils.FileUtil.saveData2File;
-import static com.wangguangwu.client.utils.StringUtil.map2String;
 
 /**
  * use a little array, such as 1024 bytes size
@@ -32,14 +32,14 @@ import static com.wangguangwu.client.utils.StringUtil.map2String;
 public class Response {
 
     /**
+     * response
+     */
+    Response response = new Response();
+
+    /**
      * inputStream
      */
     private InputStream inputStream;
-
-    /**
-     * save file name
-     */
-    private String fileName;
 
     /**
      * protocol
@@ -62,26 +62,6 @@ public class Response {
     private Map<String, String> headerMap = new HashMap<>();
 
     /**
-     * whole response
-     */
-    private String wholeResponse;
-
-    /**
-     * response line
-     */
-    private String responseLine;
-
-    /**
-     * response header
-     */
-    private String responseHeader;
-
-    /**
-     * response empty Line
-     */
-    private String responseEmptyLine = "\r\n";
-
-    /**
      * response body
      */
     private String responseBody;
@@ -101,8 +81,6 @@ public class Response {
      */
     private int remainingLength;
 
-    private int bufferSize;
-
     /**
      * inputStream constructor
      *
@@ -112,72 +90,51 @@ public class Response {
         this.inputStream = inputStream;
     }
 
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
+
     /**
      * parse the response.
      *
      * @return response
      */
     public Response parseResponse() {
-
-        Response response = new Response();
-
         // response line and header and empty line
         byte[] firstRead = parseInputStream2Bytes(Commons.DEFAULT_BUFFER_SIZE);
 
-        // whether the responseLine has been readed
         boolean parseResponseLine = true;
-
-        // in the readFirst but belongs to response body
         byte[] remainContent = new byte[0];
 
-        // loop to parse the response
+        // parse response
         for (int index = 0, i = 0; i < firstRead.length - 1; i++) {
             // each line is end with "\r\n"
-            if (firstRead[i] == RETURN && firstRead[i + 1] == WRAP) {
-
-                // response line
+            if (firstRead[i] == Symbol.RETURN && firstRead[i + 1] == Symbol.WRAP) {
+                // parse response line
                 if (parseResponseLine) {
-                    // length of a line
                     int length = i - index;
-                    // buffer array
                     byte[] subBytes = new byte[length];
-                    // copy data
                     System.arraycopy(firstRead, index, subBytes, 0, length);
-                    // responseLine, such as HTTP/1.1 200 OK
-                    responseLine = new String(subBytes, StandardCharsets.UTF_8);
-
-                    // split with " "
+                    String responseLine = new String(subBytes, StandardCharsets.UTF_8);
                     String[] responseLineSpilt = responseLine.split(SPACE);
-                    protocol = responseLineSpilt[0];
-                    code = Integer.parseInt(responseLineSpilt[1]);
-                    description = responseLineSpilt[2];
-
-                    response.setProtocol(protocol);
-                    response.setCode(code);
-                    response.setDescription(description);
-
-                    log.info("responseLine: {}", responseLine);
-
+                    response.setProtocol(responseLineSpilt[0]);
+                    response.setCode(Integer.parseInt(responseLineSpilt[1]));
+                    response.setDescription(responseLineSpilt[2]);
                     // 404 NOT FOUND
-                    if (Http.BAD_RESPONSE.contains(code)) {
+                    if (Http.BAD_RESPONSE.contains(response.getCode())) {
                         throw new RuntimeException("error response");
                     }
-
                     parseResponseLine = false;
-                    // next line
                     index = i + 2;
                     continue;
                 }
-
                 // parse response header
                 int length = i - index;
                 byte[] subBytes = new byte[length];
-
                 System.arraycopy(firstRead, index, subBytes, 0, length);
-
                 // next line
                 index = i + 2;
-
                 // response empty line
                 if (subBytes.length == 0) {
                     responseBesidesBodyLength = index;
@@ -186,12 +143,9 @@ public class Response {
                     // copy data
                     System.arraycopy(firstRead, index, remainContent, 0, remainingLength);
                     // response header
-                    responseHeader = map2String(headerMap);
-
                     response.setHeaderMap(headerMap);
                     break;
                 }
-
                 // response header
                 String headerStr = new String(subBytes, StandardCharsets.UTF_8);
                 // key : value
@@ -224,7 +178,6 @@ public class Response {
         if (responseBodyRemainLength > 0) {
             responseBodyContent = parseInputStream2Bytes(responseBodyRemainLength);
         }
-
         String charset = Commons.DEFAULT_CHARSET.name();
         if (headerMap.containsKey(Http.CONTENT_TYPE)
                 && headerMap.get(Http.CONTENT_TYPE).contains(Http.CHARSET)) {
@@ -233,7 +186,6 @@ public class Response {
             int charsetIndex = contentValue.indexOf(Http.CHARSET);
             charset = contentValue.substring(charsetIndex + 8);
         }
-
         try {
             responseBody = new String(remainContent, charset)
                     + new String(responseBodyContent, charset);
@@ -242,12 +194,6 @@ public class Response {
                     + new String(responseBodyContent, Commons.DEFAULT_CHARSET);
         }
         response.setResponseBody(responseBody);
-        log.info("responseBody: \r\n{}", responseBody);
-        // save data to file
-        wholeResponse = responseLine + responseHeader + responseEmptyLine + responseBody;
-        handleFileName();
-        saveData2File(fileName, responseBody);
-
         return response;
     }
 
@@ -286,17 +232,6 @@ public class Response {
         byte[] content = new byte[readCount];
         System.arraycopy(bytes, 0, content, 0, readCount);
         return content;
-    }
-
-    /**
-     * ex: www.zhipin.com/robots.txt ==> zhipin/robots.txt
-     */
-    private void handleFileName() {
-        String tempFile = fileName.substring(fileName.indexOf(SLASH));
-        fileName = fileName.substring(0, fileName.indexOf(SLASH));
-        int index1 = fileName.indexOf(POINT);
-        int index2 = fileName.lastIndexOf(POINT);
-        fileName = fileName.substring(index1 + 1, index2) + tempFile;
     }
 
 }

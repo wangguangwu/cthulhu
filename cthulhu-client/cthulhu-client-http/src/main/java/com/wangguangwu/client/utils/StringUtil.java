@@ -16,20 +16,6 @@ public class StringUtil {
     private static final String MATCH = "[0-9]";
 
     /**
-     * transfer map to string.
-     *
-     * @param map map
-     * @return string
-     */
-    public static String map2String(Map<String, String> map) {
-        StringBuilder result = new StringBuilder();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            result.append(entry.getKey()).append(Symbol.SEMICOLON).append(Symbol.SPACE).append(entry.getValue()).append("\r\n");
-        }
-        return result.toString();
-    }
-
-    /**
      * parseQueryString
      *
      * @param url url

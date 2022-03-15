@@ -91,7 +91,7 @@ public class CthulhuController {
             }
         });
         data.forEach(System.out::println);
-        cthulhuService.saveData(data);
+//        cthulhuService.saveData();
     }
 
     @RequestMapping("queryData")

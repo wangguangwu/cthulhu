@@ -74,4 +74,20 @@ public class Http {
      */
     public static final String LOCATION = "location";
 
+    /**
+     * send request template.
+     */
+    public static final String REQUEST_TEMPLATE = """
+            User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:97.0) Gecko/20100101 Firefox/97.0\r
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r
+            Accept-Language: en-US,en;q=0.5\r
+            Connection: Keep-Alive\r
+            Upgrade-Insecure-Requests: 1\r
+            Sec-Fetch-Dest: document\r
+            Sec-Fetch-Mode: navigate\r
+            Sec-Fetch-Site: none\r
+            Sec-Fetch-User: ?1\r
+            \r
+            """;
+
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author yuanzhixiang
  */
-public class BossUtil {
+public class BossUtil implements AutoCloseable{
 
     private static final ChromeDriver CHROME_DRIVER;
 
@@ -24,7 +24,6 @@ public class BossUtil {
 
     public String getZpsToken(String url) {
         CHROME_DRIVER.get(url);
-//        CHROME_DRIVER.get("https://www.zhipin.com/c101210100/");
         for (Cookie cookie : CHROME_DRIVER.manage().getCookies()) {
             if ("__zp_stoken__".equals(cookie.getName())) {
                 System.out.println("wang:" + cookie.getValue());
@@ -41,4 +40,8 @@ public class BossUtil {
         System.out.println(bossUtil.getZpsToken("https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1"));
     }
 
+    @Override
+    public void close() throws Exception {
+        CHROME_DRIVER.quit();
+    }
 }
