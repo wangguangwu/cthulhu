@@ -45,7 +45,8 @@ public class WorkImpl implements Work {
      */
     public WorkImpl(String url) {
         Builder builder = new RequestBuilder();
-        request = builder.url(url).cookies(BossUtil.getZpsToken())
+        BossUtil bossUtil = new BossUtil();
+        request = builder.url(url).cookies(bossUtil.getZpsToken(url))
                 .parse();
     }
 
@@ -121,6 +122,7 @@ public class WorkImpl implements Work {
             bufferedWriter.write("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r\n");
             bufferedWriter.write("Accept-Language: en-US,en;q=0.5\r\n");
             bufferedWriter.write("Connection: Keep-Alive\r\n");
+            System.out.println("wang:" + cookies);
             bufferedWriter.write("Cookie: " + cookies + "\r\n");
             bufferedWriter.write("Upgrade-Insecure-Requests: 1\r\n");
             bufferedWriter.write("Sec-Fetch-Dest: document\r\n");

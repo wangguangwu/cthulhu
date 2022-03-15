@@ -22,10 +22,12 @@ public class BossUtil {
         CHROME_DRIVER = new ChromeDriver();
     }
 
-    public static String getZpsToken() {
-        CHROME_DRIVER.get("https://www.zhipin.com/c101210100-p100101/");
+    public String getZpsToken(String url) {
+        CHROME_DRIVER.get(url);
+//        CHROME_DRIVER.get("https://www.zhipin.com/c101210100/");
         for (Cookie cookie : CHROME_DRIVER.manage().getCookies()) {
             if ("__zp_stoken__".equals(cookie.getName())) {
+                System.out.println("wang:" + cookie.getValue());
                 return "__zp_stoken__=" + cookie.getValue();
             }
         }
@@ -34,8 +36,9 @@ public class BossUtil {
 
 
     public static void main(String[] args) {
-        System.out.println(getZpsToken());
-        System.out.println(getZpsToken());
+        BossUtil bossUtil = new BossUtil();
+        System.out.println(bossUtil.getZpsToken("https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1"));
+        System.out.println(bossUtil.getZpsToken("https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1"));
     }
 
 }

@@ -13,6 +13,8 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -58,10 +60,38 @@ public class CthulhuController {
     @RequestMapping("crawData")
     public void crawData() {
         Bootstrap bootstrap = new Bootstrap();
-        List<ZhipinData> data
-                = bootstrap.url("https://www.zhipin.com/job_detail/?query=java&city=101210100&industry=&position=").start();
+        List<ZhipinData> data = new ArrayList<>();
+        List<String> list = Arrays.asList("https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1",
+                "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-2",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-3",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-4",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-5",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-6",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-7",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-8",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-9",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-10",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-11",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-12",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-13",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-14",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-15",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-16",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-17",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-18",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-19",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-20");
+        list.forEach(url -> {
+            data.addAll(bootstrap.url(url).start());
+            log.info("wgw:{}", url);
+            try {
+                Thread.sleep(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         data.forEach(System.out::println);
-//        cthulhuService.saveData(data);
+        cthulhuService.saveData(data);
     }
 
     @RequestMapping("queryData")
