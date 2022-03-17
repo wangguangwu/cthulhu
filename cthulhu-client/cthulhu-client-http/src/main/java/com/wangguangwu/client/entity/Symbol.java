@@ -5,6 +5,7 @@ package com.wangguangwu.client.entity;
  *
  * @author wangguangwu
  */
+@SuppressWarnings("unused")
 public class Symbol {
 
     /**

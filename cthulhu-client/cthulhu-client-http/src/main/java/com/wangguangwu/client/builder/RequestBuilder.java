@@ -2,6 +2,7 @@ package com.wangguangwu.client.builder;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.wangguangwu.client.entity.Http;
 import com.wangguangwu.client.http.Request;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +35,8 @@ public class RequestBuilder implements Builder{
     public Request parse() {
         try {
             URL urlObject = new URL(request.getUrl());
-            String protocol = urlObject.getProtocol();
+            String protocol = Http.HTTPS_PROTOCOL.equals(urlObject.getProtocol())
+                    ? Http.HTTPS_VERSION : Http.HTTP_VERSION;
             String host = urlObject.getHost();
             int port = urlObject.getPort() != -1
                     ? urlObject.getPort() : urlObject.getDefaultPort();

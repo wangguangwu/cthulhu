@@ -8,6 +8,7 @@ import java.util.List;
  *
  * @author wangguangwu
  */
+@SuppressWarnings("unused")
 public class Http {
 
     /**
@@ -33,9 +34,18 @@ public class Http {
     public static final String HTTPS_PROTOCOL = "https";
 
     /**
+     * https version.
+     */
+    public static final String HTTPS_VERSION = "HTTP/1.1";
+
+    /**
+     * http version.
+     */
+    public static final String HTTP_VERSION = "HTTP/1.0";
+
+    /**
      * http protocol start.
      */
-    @SuppressWarnings({"unused"})
     public static final String HTTP_PROTOCOL_START = "http://";
 
     /**

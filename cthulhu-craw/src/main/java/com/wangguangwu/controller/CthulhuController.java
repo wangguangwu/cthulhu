@@ -1,8 +1,8 @@
 package com.wangguangwu.controller;
 
-import com.wangguangwu.client.entity.ZhipinData;
 import com.wangguangwu.client.startup.Bootstrap;
 import com.wangguangwu.entity.CthulhuVO;
+import com.wangguangwu.entity.ZhipinData;
 import com.wangguangwu.service.CthulhuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,7 +82,8 @@ public class CthulhuController {
                 "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-19",
                 "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-20");
         list.forEach(url -> {
-            data.addAll(bootstrap.url(url).start());
+            String responseBody = bootstrap.url(url).start();
+            data.addAll(cthulhuService.analysisData(responseBody));
             log.info("wgw:{}", url);
             try {
                 Thread.sleep(30000);

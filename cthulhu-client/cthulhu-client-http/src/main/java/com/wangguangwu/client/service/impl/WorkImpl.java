@@ -84,7 +84,7 @@ public class WorkImpl implements Work {
      */
     private InputStream sendRequest(Request request) {
         String host = request.getHost();
-        String url = request.getUrl();
+        String uri = request.getUri();
         int port = request.getPort();
         String cookies = request.getCookies();
         String protocol = request.getProtocol();
@@ -100,7 +100,7 @@ public class WorkImpl implements Work {
 
             // write http request into socket
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
-            bufferedWriter.write("GET " + url + SPACE + protocol + "\r\n");
+            bufferedWriter.write("GET " + uri + SPACE + protocol + "\r\n");
             bufferedWriter.write("Cookie: " + cookies + "\r\n");
             bufferedWriter.write("HOST: " + host + "\r\n");
             bufferedWriter.write(Http.REQUEST_TEMPLATE);

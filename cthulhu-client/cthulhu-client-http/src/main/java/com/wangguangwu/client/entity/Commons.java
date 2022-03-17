@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author wangguangwu
  */
+@SuppressWarnings("unused")
 public class Commons {
 
     /**
