@@ -15,29 +15,6 @@ import lombok.Setter;
 public class ZhipinData {
 
     private Job job;
-//
-//    private String jobName;
-//
-//    private String jobSalary;
-//
-//    private String jobEducationRequire;
-//
-//    private String jobSkillRequire;
-//
-//    private String jobInfoDesc;
-
-
-    //======================================
-
-//    private String companyName;
-//
-//    private String companyAddress;
-//
-//    private String companyIndustry;
-//
-//    private String companyStatus;
-//
-//    private String companySize;
 
     private Company company;
 

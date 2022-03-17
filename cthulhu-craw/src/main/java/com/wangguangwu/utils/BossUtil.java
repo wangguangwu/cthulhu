@@ -1,4 +1,5 @@
-package com.wangguangwu.client.utils;
+package com.wangguangwu.utils;
+
 
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,7 +27,6 @@ public class BossUtil implements AutoCloseable{
         CHROME_DRIVER.get(url);
         for (Cookie cookie : CHROME_DRIVER.manage().getCookies()) {
             if ("__zp_stoken__".equals(cookie.getName())) {
-                System.out.println("wang:" + cookie.getValue());
                 return "__zp_stoken__=" + cookie.getValue();
             }
         }
@@ -41,7 +41,7 @@ public class BossUtil implements AutoCloseable{
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         CHROME_DRIVER.quit();
     }
 }

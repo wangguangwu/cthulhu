@@ -104,9 +104,9 @@ public class Response {
 
             if (firstRead.length < Commons.DEFAULT_BUFFER_SIZE) {
                 // 说明读到结尾，不会继续往下读取
-                responseBodyContent = new byte[remainLength];
-                System.arraycopy(firstRead, responseBesidesBodyLength, responseBodyContent, 0, remainLength);
-                response.setResponseBody(new String(responseBodyContent, charset));
+//                responseBodyContent = new byte[remainLength];
+//                System.arraycopy(firstRead, responseBesidesBodyLength, responseBodyContent, 0, remainLength);
+                response.setResponseBody(new String(remainContent, charset));
                 return response;
             }
 

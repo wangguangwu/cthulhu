@@ -70,7 +70,7 @@ public class WorkImpl implements Work {
         if (Http.MOVED_RESPONSE.contains(result.getCode())) {
             String location = result.getHeaderMap().get(Http.LOCATION);
             // access redirect website
-            request.setUrl(location);
+            request.setUri(location);
             return parseResponse(sendRequest(request));
         }
         return HtmlParse.formatHtml(result.getResponseBody());
