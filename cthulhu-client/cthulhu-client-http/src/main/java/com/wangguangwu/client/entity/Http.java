@@ -88,7 +88,7 @@ public class Http {
      * send request template.
      */
     public static final String REQUEST_TEMPLATE = """
-            User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:97.0) Gecko/20100101 Firefox/97.0\r
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36\r
             Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r
             Accept-Language: en-US,en;q=0.5\r
             Connection: Keep-Alive\r
@@ -99,5 +99,10 @@ public class Http {
             Sec-Fetch-User: ?1\r
             \r
             """;
+
+    /**
+     * zhipin cookie.
+     */
+    public static final String ZHIPIN_COOKIE = " Hm_lvt_194df3105ad7148dcf2b98a91b5e727a=1646832931,1646991992,1647332916,1647525901; wd_guid=a4990954-4fc4-4a08-96b3-79ef490a9935; historyState=state; lastCity=100010000; __g=-; Hm_lpvt_194df3105ad7148dcf2b98a91b5e727a=1647589860; acw_tc=0a099d8e16475898078851244e01a42585c7debb238fdc8ee05dd6b865d73f; __fid=b0f8fe2cf4f91f42b4eece11cff81795; __c=1647525900; __l=l=%2Fwww.zhipin.com%2Fjob_detail%2F%3Fquery%3Djava%26city%3D100010000%26industry%3D%26position%3D&r=&g=&s=3&friend_source=0&s=3&friend_source=0; __a=50749590.1647061808.1647332916.1647525900.17.3.4.17";
 
 }

@@ -15,18 +15,19 @@ import static com.wangguangwu.client.entity.Symbol.SLASH;
  * @author wangguangwu
  */
 @Slf4j
-public class RequestBuilder implements Builder{
+public class RequestBuilder implements Builder {
 
     private final Request request = new Request();
 
     @Override
-    public  Builder url(String url) {
+    public Builder url(String url) {
         request.setUrl(url);
         return this;
     }
 
     @Override
-    public  Builder cookies(String cookies) {
+    public Builder cookies(String cookies) {
+//        request.setCookies(cookies + Http.ZHIPIN_COOKIE);
         request.setCookies(cookies);
         return this;
     }

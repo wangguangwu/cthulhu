@@ -63,42 +63,38 @@ public class CthulhuController {
         Bootstrap bootstrap = new Bootstrap();
         List<ZhipinData> data = new ArrayList<>();
         BossUtil bossUtil = new BossUtil();
-        String url = "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1";
-        String responseBody = bootstrap
-                .url(url)
-                .cookies(bossUtil.getZpsToken(url)).start();
-
-        System.out.println(responseBody);
-//        List<String> list = Arrays.asList("https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1",
-//                "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-2",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-3",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-4",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-5",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-6",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-7",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-8",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-9",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-10",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-11",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-12",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-13",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-14",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-15",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-16",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-17",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-18",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-19",
-//                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-20");
-//        list.forEach(url -> {
-//            String responseBody = bootstrap.url(url).start();
-//            data.addAll(cthulhuService.analysisData(responseBody));
-//            try {
-//                Thread.sleep(30000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        cthulhuService.saveData(data);
+        List<String> list = Arrays.asList("https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1",
+                "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-2",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-3",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-4",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-5",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-6",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-7",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-8",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-9",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-10",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-11",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-12",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-13",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-14",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-15",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-16",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-17",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-18",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-19",
+                "https://www.zhipin.com/c101210100/?query=java&page=3&ka=page-20");
+        list.forEach(url -> {
+            String responseBody = bootstrap.url(url)
+                    .cookies(bossUtil.getZpsToken(url))
+                    .start();
+            data.addAll(cthulhuService.analysisData(responseBody));
+            try {
+                Thread.sleep(40000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        cthulhuService.saveData(data);
     }
 
     @RequestMapping("queryData")
@@ -113,7 +109,19 @@ public class CthulhuController {
         String url = "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1";
         String responseBody = bootstrap
                 .url(url)
-                .cookies(bossUtil.getZpsToken(url)).start();
+                .cookies(bossUtil.getZpsToken(url))
+                .start();
+        System.out.println(responseBody);
+    }
+
+    @RequestMapping("test2")
+    public void test2() {
+        Bootstrap bootstrap = new Bootstrap();
+        String url = "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1";
+        String responseBody = bootstrap
+                .url(url)
+                .cookies("__zp_stoken__=fae4dAAMiJhx8Hz9aOUpcfzZlDVVFJyYnXEV5EFADGAUgVxAROWJKVDUcHWFUFCpHF2QSE11lQxw9fgQmOngmTRt1aHoSbCI2JRdbaQF0JgZlA1ZfJWlJX0FvSGhYH3sMVV0gZ0cbNz91TXQ%3D")
+                .start();
         System.out.println(responseBody);
     }
 

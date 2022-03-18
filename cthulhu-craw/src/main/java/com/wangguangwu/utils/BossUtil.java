@@ -27,7 +27,7 @@ public class BossUtil implements AutoCloseable{
         CHROME_DRIVER.get(url);
         for (Cookie cookie : CHROME_DRIVER.manage().getCookies()) {
             if ("__zp_stoken__".equals(cookie.getName())) {
-                return "__zp_stoken__=" + cookie.getValue();
+                return "__zp_stoken__=" + cookie.getValue() + ";";
             }
         }
         throw new IllegalStateException("Zps token not found");

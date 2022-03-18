@@ -97,15 +97,11 @@ public class Response {
             response.setHeaderMap(headerMap);
 
             int remainLength = Objects.requireNonNull(remainContent).length;
-            int responseBesidesBodyLength = Commons.DEFAULT_BUFFER_SIZE - remainLength;
 
             byte[] responseBodyContent = new byte[0];
             String charset = getCharset();
 
             if (firstRead.length < Commons.DEFAULT_BUFFER_SIZE) {
-                // 说明读到结尾，不会继续往下读取
-//                responseBodyContent = new byte[remainLength];
-//                System.arraycopy(firstRead, responseBesidesBodyLength, responseBodyContent, 0, remainLength);
                 response.setResponseBody(new String(remainContent, charset));
                 return response;
             }
