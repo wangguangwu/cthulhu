@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 /**
  * @author wangguangwu
@@ -18,7 +20,7 @@ import java.util.concurrent.Executors;
 public class ApiTest {
 
     @Test
-    public void test() {
+    void test() {
         Bootstrap bootstrap = new Bootstrap();
         BossUtil bossUtil = new BossUtil();
         String url = "https://www.zhipin.com/c101210100/?query=java&page=2&ka=page-1";
@@ -26,12 +28,13 @@ public class ApiTest {
                 .url(url)
                 .cookies(bossUtil.getZpsToken(url))
                 .start();
+        assertNotNull(responseBody);
         System.out.println(responseBody);
     }
 
 
     @Test
-    public void test_bio() throws IOException {
+    void test_bio() throws IOException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         ServerSocket serverSocket = new ServerSocket(6666);
         for (int i = 0; i < 10; i++) {

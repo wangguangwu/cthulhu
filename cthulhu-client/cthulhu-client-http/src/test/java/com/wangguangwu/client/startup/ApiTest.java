@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
@@ -106,9 +107,5 @@ public class ApiTest {
         }
     }
 
-    @Test
-    public void test_selector() {
-
-    }
 
 }
