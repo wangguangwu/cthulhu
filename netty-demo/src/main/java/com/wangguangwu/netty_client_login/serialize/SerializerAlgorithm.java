@@ -1,14 +1,14 @@
 package com.wangguangwu.netty_client_login.serialize;
 
 /**
- * 序列化算法
+ * Serialization algorithm.
  *
  * @author wangguangwu
  */
 public interface SerializerAlgorithm {
 
     /**
-     * json 序列化
+     * json
      */
     byte JSON = 1;
 

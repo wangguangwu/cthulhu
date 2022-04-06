@@ -10,11 +10,9 @@ import lombok.Data;
 @Data
 public class LoginResponsePacket extends Packet {
 
-    private String userId;
+    private boolean success;
 
-    private String username;
-
-    private String password;
+    private String reason;
 
     @Override
     public Byte getCommand() {

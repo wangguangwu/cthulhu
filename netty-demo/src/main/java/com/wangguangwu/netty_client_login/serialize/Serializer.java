@@ -3,6 +3,8 @@ package com.wangguangwu.netty_client_login.serialize;
 import com.wangguangwu.netty_client_login.serialize.impl.JsonSerializer;
 
 /**
+ * Serialization interface.
+ *
  * @author wangguangwu
  */
 public interface Serializer {
@@ -10,14 +12,14 @@ public interface Serializer {
     Serializer DEFAULT = new JsonSerializer();
 
     /**
-     * 序列化算法
+     * serialization algorithm
      *
      * @return byte
      */
     byte getSerializerAlgorithm();
 
     /**
-     * java 对象转换为二进制
+     * convert java object to binary
      *
      * @param object java object
      * @return binary data
@@ -26,12 +28,12 @@ public interface Serializer {
 
 
     /**
-     * 二进制转化为 java 对象
+     * convert binary to java object
      *
-     * @param clazz 字节码
-     * @param bytes 二进制数据
-     * @param <T>   转化类型
-     * @return java 对象
+     * @param clazz clazz
+     * @param bytes binary data
+     * @param <T>   Class
+     * @return java object
      */
     <T> T deserialize(Class<T> clazz, byte[] bytes);
 

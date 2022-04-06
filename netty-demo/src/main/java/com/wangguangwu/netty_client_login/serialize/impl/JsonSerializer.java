@@ -5,7 +5,7 @@ import com.wangguangwu.netty_client_login.serialize.Serializer;
 import com.wangguangwu.netty_client_login.serialize.SerializerAlgorithm;
 
 /**
- * 使用 json 实现序列化
+ * Implement serialization by using json.
  *
  * @author wangguangwu
  */

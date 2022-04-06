@@ -2,7 +2,6 @@ package com.wangguangwu.netty_client_login.protocol;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-import lombok.extern.jackson.Jacksonized;
 
 /**
  * @author wangguangwu
